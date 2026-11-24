@@ -3,6 +3,7 @@
 **Dictate into any Mac app.** Press a shortcut, talk, and Voicey types the polished text where your cursor is.
 
 ![Latest release](https://img.shields.io/github/v/release/anantamishra/voicey?label=release)
+![MIT license](https://img.shields.io/badge/license-MIT-green)
 ![macOS 13+](https://img.shields.io/badge/macOS-13%2B-blue)
 ![Apple silicon](https://img.shields.io/badge/Apple%20silicon-required-lightgrey)
 
@@ -143,9 +144,13 @@ release notes in `CHANGELOG.md`.
 | `Tests/VoiceyTests` | unit tests for gestures, updates, dictionary, snippets, shortcuts and more |
 | `tools/` | icon generation, Whisper bundling, release script |
 | `install.sh` | the Terminal installer |
+| `LICENSE`, `THIRD_PARTY_NOTICES.md`, `Resources/licenses/` | Voicey's license and the licenses of what it bundles |
 | `RELEASING.md` | how to cut and publish a release |
 
 ## Status and license
 
-An early, personal project. No license has been chosen yet, so all rights are reserved for now.
-Releases bundle [whisper.cpp](https://github.com/ggml-org/whisper.cpp) (MIT).
+An early, personal project, released under the [MIT License](LICENSE).
+
+Voicey bundles [whisper.cpp](https://github.com/ggml-org/whisper.cpp) and ggml (MIT) and the LLVM OpenMP runtime
+(Apache 2.0 with LLVM Exceptions). Their notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the
+license texts travel inside the app.

@@ -6,6 +6,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# License texts (kept in Resources/licenses) travel with the engine.   usage: copy_licenses <dest> <name>...
+copy_licenses() {
+  local dest="$1"; shift
+  for name in "$@"; do cp "Resources/licenses/LICENSE-$name" "$dest/LICENSE-$name"; done
+}
+
 # Sign with the Developer ID identity (hardened runtime) when build.sh provides one, otherwise ad-hoc.
 sign() {
   if [ -n "${SIGN_IDENTITY:-}" ]; then codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$1"
@@ -18,7 +24,7 @@ rm -rf "$DEST"
 if [ -x build/whisper/whisper-cli ]; then
   mkdir -p "$DEST"
   cp build/whisper/whisper-cli "$DEST/whisper-cli"
-  [ -f build/whisper/LICENSE ] && cp build/whisper/LICENSE "$DEST/LICENSE-whisper.cpp"
+  copy_licenses "$DEST" whisper.cpp ggml
   sign "$DEST/whisper-cli"
   echo "bundled portable whisper-cli"
   exit 0
@@ -71,7 +77,5 @@ while [ ${#queue} -gt 0 ]; do
 done
 
 for f in "$DEST"/*(.); do sign "$f" 2>/dev/null; done
-[ -f "$CELLAR/LICENSE" ] && cp "$CELLAR/LICENSE" "$DEST/LICENSE-whisper.cpp"
-[ -f "$GGML/LICENSE" ] && cp "$GGML/LICENSE" "$DEST/LICENSE-ggml"
-for l in "$LIBOMP"/LICENSE*(N); do cp "$l" "$DEST/LICENSE-libomp"; done
+copy_licenses "$DEST" whisper.cpp ggml libomp
 echo "bundled Homebrew whisper-cli with $(ls "$DEST" | wc -l | tr -d ' ') files ($(du -sh "$DEST" | awk '{print $1}'))"

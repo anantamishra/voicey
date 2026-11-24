@@ -18,6 +18,7 @@ cp .build/release/Voicey "$APP/Contents/MacOS/Voicey"
 mkdir -p "$APP/Contents/Resources"
 ./tools/bundle_whisper.sh "$APP"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+cp LICENSE THIRD_PARTY_NOTICES.md "$APP/Contents/Resources/"
 cp Info.plist "$APP/Contents/Info.plist"
 
 # Version comes from the VERSION file; the build number is a timestamp unless the release script sets one.
