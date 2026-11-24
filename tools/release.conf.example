@@ -1,0 +1,7 @@
+# Copy to tools/release.conf and fill in. Both are used by build.sh and release.sh.
+
+# Where the zip will be hosted (no trailing slash). release.sh writes this into update.json.
+DOWNLOAD_BASE="https://example.com/voicey"
+
+# Where the app looks for update.json. Baked into the app at build time (users can override it in Settings).
+FEED_URL="https://example.com/voicey/update.json"
