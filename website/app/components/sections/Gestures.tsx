@@ -20,7 +20,7 @@ export default function Gestures() {
           </div>
           <figcaption>
             <b>hold to talk</b>
-            <span>press and hold your shortcut, say it, let go. that&rsquo;s it.</span>
+            <span>press and hold your shortcut, say it, let go. that&rsquo;s it. any key works, even a single one like fn.</span>
           </figcaption>
         </figure>
         <figure className="moment">
@@ -29,6 +29,8 @@ export default function Gestures() {
               <div className="v-keys static">
                 <kbd className="wide">space</kbd>
                 <span className="tap">×2</span>
+                <span className="or">or</span>
+                <span className="clap-kbd" aria-hidden="true">👏👏</span>
               </div>
               <Pop kind="hands">Listening hands-free… press to stop</Pop>
             </div>
