@@ -91,8 +91,8 @@ export default function HowItWorks() {
           </li>
           <li>
             <span className="step-body">
-              <b>let go, or just stop talking</b>
-              <span>the polished text lands at your cursor. a few quiet seconds also finish it for you.</span>
+              <b>let go</b>
+              <span>the polished text lands at your cursor. pause for a few seconds and it finishes for you.</span>
             </span>
           </li>
         </ol>
@@ -111,26 +111,18 @@ export default function HowItWorks() {
             <ul className="feature-list">
               <li>
                 <MicrophoneIcon {...ICON} />
-                hold to talk, tap to toggle, or double-tap for hands-free
+                hold to talk, tap to toggle, double-tap or clap for hands-free, and it stops when you pause
               </li>
               <li>
                 <KeyIcon {...ICON} />
                 any key as your shortcut, even fn
               </li>
               <li>
-                <SoundIcon {...ICON} />
-                double clap to start, no keyboard needed
-              </li>
-              <li>
-                <MicrophoneIcon {...ICON} />
-                stops and transcribes by itself when you pause
-              </li>
-              <li>
                 <SoundIcon {...ICON} />a live pop-up shows your words as you speak
               </li>
               <li>
                 <GlobeOutlineIcon {...ICON} />
-                many languages, with the multilingual models
+                many languages, with whisper or apple&rsquo;s recognizer, and silence trimmed
               </li>
             </ul>
           </div>
@@ -139,7 +131,7 @@ export default function HowItWorks() {
             <ul className="feature-list">
               <li>
                 <SparkleIcon {...ICON} />
-                ai polish with claude code or codex
+                ai polish with claude code or codex, plus your own instructions
               </li>
               <li>
                 <DocumentIcon {...ICON} />a personal dictionary for names and jargon
@@ -162,7 +154,7 @@ export default function HowItWorks() {
               </li>
               <li>
                 <CopyIcon {...ICON} />
-                copy your last transcription from the menu bar
+                copy your last transcription from the menu bar (⇧⌘C)
               </li>
               <li>
                 <DotsGridIcon {...ICON} />
@@ -173,7 +165,7 @@ export default function HowItWorks() {
                 updates itself, in the background
               </li>
               <li>
-                <LaptopIcon {...ICON} />a normal mac app, in your dock and menu bar
+                <LaptopIcon {...ICON} />a normal mac app: dock icon optional, opens at login if you like
               </li>
             </ul>
           </div>

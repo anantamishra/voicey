@@ -35,35 +35,7 @@ export default function Gestures() {
           </div>
           <figcaption>
             <b>double-tap for hands-free</b>
-            <span>keep talking without holding a key. press once more when you&rsquo;re done.</span>
-          </figcaption>
-        </figure>
-        <figure className="moment">
-          <div className="m-photo vp vp-5" aria-hidden="true">
-            <div className="vm">
-              <div className="clap">
-                <span>👏</span>
-                <span>👏</span>
-              </div>
-              <Pop kind="hands">Listening hands-free… pause to finish</Pop>
-            </div>
-          </div>
-          <figcaption>
-            <b>start with a double clap</b>
-            <span>no keyboard needed: clap twice and talk. it&rsquo;s off until you turn it on in settings.</span>
-          </figcaption>
-        </figure>
-        <figure className="moment">
-          <div className="m-photo vp vp-6" aria-hidden="true">
-            <div className="vm">
-              <Pop kind="live">send it to marcus by friday</Pop>
-              <span className="pause-note">3 quiet seconds</span>
-              <Pop kind="work">Transcribing…</Pop>
-            </div>
-          </div>
-          <figcaption>
-            <b>stops when you pause</b>
-            <span>finish talking and voicey transcribes by itself after a few quiet seconds. choose 2, 3 or 5, or never.</span>
+            <span>keep talking without holding a key. it stops when you pause for a few seconds, or press once more. a double clap can start it too.</span>
           </figcaption>
         </figure>
         <figure className="moment">
@@ -101,7 +73,7 @@ export default function Gestures() {
           </div>
           <figcaption>
             <b>your words, spelled right</b>
-            <span>add the names you say often. say a short phrase and it expands to the full text.</span>
+            <span>add the names you say often, and the speech engine and ai both use them. say a short phrase and it expands to the full text.</span>
           </figcaption>
         </figure>
       </div>

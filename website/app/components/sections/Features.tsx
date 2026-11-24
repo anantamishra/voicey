@@ -1,18 +1,16 @@
 const CARDS = [
   { icon: "🎙️", text: "Hold your shortcut, talk, let go. The text lands where your cursor is.", tag: "hold to talk" },
-  { icon: "🤲", text: "Double-tap to keep talking hands-free, as long as you like.", tag: "hands-free" },
-  { icon: "👏", text: "Clap twice and Voicey starts listening. No keyboard needed.", tag: "double clap" },
-  { icon: "⏱️", text: "Stop talking for a few seconds and it transcribes by itself.", tag: "auto-stop" },
+  { icon: "🤲", text: "Double-tap or clap twice to talk hands-free. It stops by itself when you pause.", tag: "hands-free" },
   { icon: "⌨️", text: "Use any key you want, even a single one like fn or Right ⌥.", tag: "your shortcut" },
   { icon: "🔒", text: "Your voice is turned into text on your Mac. The audio is never uploaded.", tag: "private" },
-  { icon: "✨", text: "Claude Code or Codex tidies the text: punctuation, filler words, the lot.", tag: "ai polish" },
+  { icon: "✨", text: "Claude Code or Codex tidies the text: punctuation, filler words, the lot. Add your own instructions.", tag: "ai polish" },
   { icon: "📖", text: "Teach it the names and terms you say often, and it spells them right.", tag: "dictionary" },
   { icon: "🎨", text: "Formal in Mail, casual in Messages. Pick a tone for every app.", tag: "per-app tone" },
   { icon: "✂️", text: "Say “my address” and the whole thing appears, word for word.", tag: "snippets" },
   { icon: "👀", text: "A live pop-up shows your words as you speak them.", tag: "live preview" },
   { icon: "🌍", text: "Many languages, with the multilingual speech models.", tag: "languages" },
-  { icon: "📋", text: "Lost the last thing you said? Copy it again from the menu bar.", tag: "copy last" },
-  { icon: "🔄", text: "Free, open source and it updates itself.", tag: "mit license" },
+  { icon: "📋", text: "Lost the last thing you said? Copy it again from the menu bar, or press ⇧⌘C.", tag: "copy last" },
+  { icon: "🔄", text: "Free and open source. Opens at login if you like, and updates itself.", tag: "mit license" },
 ];
 
 function Row({ cards, reverse }: { cards: typeof CARDS; reverse?: boolean }) {
@@ -60,8 +58,8 @@ export default function Features() {
           ))}
         </ul>
         <div aria-hidden="true">
-          <Row cards={CARDS.slice(0, 7)} />
-          <Row cards={CARDS.slice(7)} reverse />
+          <Row cards={CARDS.slice(0, 6)} />
+          <Row cards={CARDS.slice(6)} reverse />
         </div>
       </div>
     </section>
