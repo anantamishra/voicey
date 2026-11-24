@@ -27,6 +27,8 @@ final class Recorder {
     var onFinish: ((String) -> Void)?
     var onStatus: ((String) -> Void)?
     var onLevel: ((Float) -> Void)?
+    var onSilence: (() -> Void)?                 // a long pause after speaking: time to stop
+    private var silence = SilenceWatcher(pause: 0)
     private var lastLevelTime = Date.distantPast
 
     static func requestPermissions(_ done: @escaping (Bool) -> Void) {
@@ -74,6 +76,7 @@ final class Recorder {
         guard format.sampleRate > 0 else { throw fail(4, "No audio input device") }
         converter = whisperMode ? AVAudioConverter(from: format, to: target) : nil
         lock.lock(); samples = []; lock.unlock()
+        silence = SilenceWatcher(pause: Prefs.d.double(forKey: Prefs.autoStop))
         vlog("start: engine=\(whisperMode ? "whisper/\(ModelStore.currentID)" : RecognitionEngine.apple.rawValue) locale=\(recognizer.locale.identifier) format=\(format)")
 
         input.installTap(onBus: 0, bufferSize: 1024, format: format) { [weak self, weak req] buffer, _ in
@@ -134,7 +137,11 @@ final class Recorder {
         for i in 0..<n { sum += ch[i] * ch[i] }
         let db = 10 * log10(max(sum / Float(n), 1e-10))
         let level = max(0, min(1, (db + 50) / 38))
-        DispatchQueue.main.async { [weak self] in self?.onLevel?(level) }
+        let stopNow = silence.feed(level: level, at: ProcessInfo.processInfo.systemUptime)
+        DispatchQueue.main.async { [weak self] in
+            self?.onLevel?(level)
+            if stopNow { self?.onSilence?() }
+        }
     }
 
     /// Throws the recording away without producing text (the key turned out to be part of another shortcut).

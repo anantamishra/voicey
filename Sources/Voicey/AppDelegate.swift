@@ -24,6 +24,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var modifierKey: ModifierHotKey?
     private var gesture = GestureMachine()
     private var graceWork: DispatchWorkItem?
+    private let clapListener = ClapListener()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -36,6 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setIcon(.idle)
         wireRecorder()
         setUpShortcut()
+        setUpClapListener()
         startBackgroundWork()
         showFirstRunScreens()
     }
@@ -129,6 +131,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         recorder.onLevel = { [weak self] level in self?.overlay.update(level: level) }
         recorder.onFinish = { [weak self] raw in self?.finished(raw) }
+        recorder.onSilence = { [weak self] in
+            guard let self, self.recording else { return }
+            vlog("silence: stopping automatically")
+            self.stopRecording()
+        }
     }
 
     private func setUpShortcut() {
@@ -142,6 +149,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.modifierKey?.stop()
             self?.modifierKey = nil
         }
+    }
+
+    /// A double clap starts a hands-free dictation. The listener only runs while idle, because Voicey's recorder needs the mic.
+    private func setUpClapListener() {
+        clapListener.onDoubleClap = { [weak self] in
+            guard let self, !self.recording, !self.busy else { return }
+            vlog("double clap")
+            self.startRecording()
+            if self.recording {
+                self.overlay.setLocked(true)
+                self.toggleItem.title = "Stop Dictation (press \(HotKeyOption.current.label))"
+            }
+        }
+        NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.refreshClapListener()
+        }
+        refreshClapListener()
+    }
+
+    private func refreshClapListener() {
+        let wanted = Prefs.d.bool(forKey: Prefs.clapToStart) && !recording && !busy
+        if wanted { clapListener.start() } else { clapListener.stop() }
     }
 
     private func startBackgroundWork() {
@@ -248,6 +277,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func startRecording() {
         let front = NSWorkspace.shared.frontmostApplication
         targetApp = front?.bundleIdentifier == Bundle.main.bundleIdentifier ? nil : front
+        clapListener.stop()
         do {
             try recorder.start()
             recording = true
@@ -260,6 +290,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             setStatus("Error: \(error.localizedDescription)")
             overlay.show()
             overlay.finish("Error: \(error.localizedDescription)", success: false)
+            refreshClapListener()
         }
     }
 
@@ -283,6 +314,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setIcon(.idle)
         toggleItem.title = idleTitle
         setStatus("Ready")
+        refreshClapListener()
     }
 
     private func endGestureState() {
@@ -323,6 +355,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         busy = false
         setIcon(.idle)
         toggleItem.title = idleTitle
+        refreshClapListener()
     }
 
     // MARK: Menu actions and display

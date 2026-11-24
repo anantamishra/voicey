@@ -64,6 +64,8 @@ struct SettingsView: View {
     @AppStorage(Prefs.whisperModel) private var whisperModel = "base.en"
     @AppStorage(Prefs.trimSilence) private var trimSilence = true
     @AppStorage(Prefs.overlay) private var overlay = true
+    @AppStorage(Prefs.clapToStart) private var clapToStart = false
+    @AppStorage(Prefs.autoStop) private var autoStop = 3.0
     @ObservedObject private var store = ModelStore.shared
     @ObservedObject private var personal = Personalization.shared
     @ObservedObject private var tools = AIToolStore.shared
@@ -167,8 +169,14 @@ struct SettingsView: View {
                 SwitchRow(symbol: "text.bubble", title: "Live text pop-up", isOn: $overlay)
                 Separator()
                 SwitchRow(symbol: "doc.on.clipboard.fill", title: "Paste at cursor", isOn: $autoPaste)
+                Separator()
+                Row(symbol: "timer", title: "Stop after a pause") {
+                    MenuPicker(selection: $autoStop, options: [(0.0, "Never"), (2.0, "2 seconds"), (3.0, "3 seconds"), (5.0, "5 seconds")])
+                }
+                Separator()
+                SwitchRow(symbol: "hands.clap", title: "Double clap to start", isOn: $clapToStart)
             }
-            Footer(text: modeFooter + " A single key works too: click the shortcut, then tap fn, Right \u{2325} or an F-key. If fn opens the emoji picker, set \u{201C}Press \u{1F310} key to\u{201D} to Do Nothing in System Settings \u{2192} Keyboard.")
+            Footer(text: (autoStop > 0 ? "Voicey stops and transcribes by itself after \(Int(autoStop)) quiet seconds once you have spoken. " : "") + (clapToStart ? "Double clap to start keeps the microphone open to listen for claps (nothing is recorded or saved), so the orange mic dot stays on. A double clap starts hands-free dictation; press your shortcut or use the menu to stop. " : "") + modeFooter + " A single key works too: click the shortcut, then tap fn, Right \u{2325} or an F-key. If fn opens the emoji picker, set \u{201C}Press \u{1F310} key to\u{201D} to Do Nothing in System Settings \u{2192} Keyboard.")
         }
     }
 

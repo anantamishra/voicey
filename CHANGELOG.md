@@ -3,6 +3,12 @@
 Each release needs a `## X.Y.Z` section here. `tools/release.sh` uses it as the release notes
 shown to people in the update prompt.
 
+## 1.1.0 - 2026-11-24
+
+- Voicey now stops and transcribes by itself after a pause in your speech. Choose 2, 3 (default) or 5 seconds, or never, in Settings → Dictation.
+- Double clap to start: clap twice and Voicey starts a hands-free dictation. It is off by default because it keeps the microphone open to listen for claps (nothing is recorded or saved).
+- The website lists both.
+
 ## 1.0.1 - 2026-11-24
 
 - Voicey is now released under the MIT License. The licenses of the bundled speech engine (whisper.cpp, ggml, libomp) travel inside the app, and the About window shows the copyright.

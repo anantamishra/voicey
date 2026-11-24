@@ -34,6 +34,14 @@ export default function Faq() {
           <p>the default is ⌃⌥ space. record any key you like in settings, even a single key such as fn, right ⌥ or an f-key. hold it to talk, press it once to start and again to stop, or double-tap it for hands-free dictation.</p>
         </details>
         <details>
+          <summary>can i start it without touching the keyboard?</summary>
+          <p>yes. turn on “double clap to start” in settings, then clap twice and talk. it’s off by default, because it keeps the microphone open to listen for claps (nothing is recorded or saved, and the orange mic dot stays on). a double clap starts hands-free dictation.</p>
+        </details>
+        <details>
+          <summary>does it stop by itself when i finish talking?</summary>
+          <p>yes. after you’ve spoken, a few quiet seconds (3 by default, or 2 or 5, or never) end the recording and voicey transcribes and pastes the text. you can still stop it any time with your shortcut or the menu.</p>
+        </details>
+        <details>
           <summary>which languages does it understand?</summary>
           <p>many. pick a multilingual whisper model in settings, or use apple’s recognizer, and choose your language. the english-only models are smaller and faster if english is all you need.</p>
         </details>

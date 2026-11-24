@@ -1,6 +1,8 @@
 const CARDS = [
   { icon: "🎙️", text: "Hold your shortcut, talk, let go. The text lands where your cursor is.", tag: "hold to talk" },
   { icon: "🤲", text: "Double-tap to keep talking hands-free, as long as you like.", tag: "hands-free" },
+  { icon: "👏", text: "Clap twice and Voicey starts listening. No keyboard needed.", tag: "double clap" },
+  { icon: "⏱️", text: "Stop talking for a few seconds and it transcribes by itself.", tag: "auto-stop" },
   { icon: "⌨️", text: "Use any key you want, even a single one like fn or Right ⌥.", tag: "your shortcut" },
   { icon: "🔒", text: "Your voice is turned into text on your Mac. The audio is never uploaded.", tag: "private" },
   { icon: "✨", text: "Claude Code or Codex tidies the text: punctuation, filler words, the lot.", tag: "ai polish" },
@@ -58,8 +60,8 @@ export default function Features() {
           ))}
         </ul>
         <div aria-hidden="true">
-          <Row cards={CARDS.slice(0, 6)} />
-          <Row cards={CARDS.slice(6)} reverse />
+          <Row cards={CARDS.slice(0, 7)} />
+          <Row cards={CARDS.slice(7)} reverse />
         </div>
       </div>
     </section>
