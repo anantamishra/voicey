@@ -24,6 +24,16 @@ macOS 13 or later on Apple silicon, with Xcode or the Command Line Tools to buil
 (`brew install whisper-cpp`); `tools/build_whisper.sh` compiles a portable copy instead. Without either, Voicey
 falls back to Apple's recognizer.
 
+### Install
+
+Paste this in Terminal. It downloads the latest release, checks its checksum, installs it into Applications and
+opens it, with no "could not verify" warning:
+
+    curl -fsSL https://raw.githubusercontent.com/anantamishra/voicey/main/install.sh | bash
+
+(Prefer to read it first? `curl -fsSLO https://raw.githubusercontent.com/anantamishra/voicey/main/install.sh`, open
+`install.sh`, then `bash install.sh`.)
+
 If you downloaded a release, macOS will say it "could not verify Voicey is free of malware" the first time, because
 the app is not notarized yet. Open **System Settings → Privacy & Security** and click **Open Anyway** (or run
 `xattr -dr com.apple.quarantine /Applications/Voicey.app`). You only need to do this once.
