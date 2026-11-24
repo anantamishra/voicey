@@ -134,8 +134,16 @@ swift test                 # runs the test suite
 
 ### Releasing
 
-Releases, signing and notarization are covered in [RELEASING.md](RELEASING.md). The version lives in `VERSION`, and
-release notes in `CHANGELOG.md`.
+Add a `## X.Y.Z` section to `CHANGELOG.md` (it becomes the release notes), then run `tools/release.sh patch` (or `minor`,
+`major`, or an exact version). It runs the tests, builds, and writes `dist/Voicey-X.Y.Z.zip`, `dist/Voicey.zip` (the same file
+under a fixed name) and `dist/update.json`. Publish them with:
+
+```bash
+gh release create vX.Y.Z dist/Voicey-X.Y.Z.zip dist/Voicey.zip dist/update.json
+```
+
+Release settings (where the zip is hosted, and the Developer ID certificate and notarization login for removing the
+"could not verify" warning) go in `tools/release.conf`; copy `tools/release.conf.example` and read its comments.
 
 ### Project layout
 
@@ -146,7 +154,6 @@ release notes in `CHANGELOG.md`.
 | `tools/` | icon generation, Whisper bundling, release script |
 | `install.sh` | the Terminal installer |
 | `LICENSE`, `THIRD_PARTY_NOTICES.md`, `Resources/licenses/` | Voicey's license and the licenses of what it bundles |
-| `RELEASING.md` | how to cut and publish a release |
 
 ## Status and license
 

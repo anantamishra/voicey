@@ -38,7 +38,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setUpShortcut()
         startBackgroundWork()
         showFirstRunScreens()
-        runLaunchFlags()
     }
 
     /// The standard Mac menu bar. Without an Edit menu, ⌘C / ⌘V would not work in Voicey's own text fields.
@@ -372,88 +371,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// The menu's status line shows what Voicey is doing, never what you said.
     private func setStatus(_ text: String) {
         statusLine.title = text.isEmpty ? "—" : (text.count > 80 ? "…" + text.suffix(80) : text)
-    }
-}
-
-// MARK: - Test hooks
-// Launch flags used to exercise the real app without a person at the keyboard. Nothing here runs in normal use.
-
-extension AppDelegate {
-    fileprivate func runLaunchFlags() {
-        let args = CommandLine.arguments
-        if args.contains("--settings") { DispatchQueue.main.async { SettingsWindow.shared.show() } }
-        if args.contains("--onboarding") { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { OnboardingWindow.shared.show() } }
-        if args.contains("--whisper-selftest") { runWhisperSelfTest() }
-        if args.contains("--check-updates") { runUpdateSelfTest(install: false) }
-        if args.contains("--update-selftest") { runUpdateSelfTest(install: true) }
-        if args.contains("--overlay-demo") { runOverlayDemo() }
-        if let arg = args.first(where: { $0.hasPrefix("--gesture-demo=") }) { runGestureDemo(String(arg.dropFirst("--gesture-demo=".count))) }
-        if args.contains("--copy-last") { copyLast(); vlog("copy-last: clipboard now holds the last transcription") }
-    }
-
-    /// `--check-updates` / `--update-selftest` run the update flow headless (with `-updateFeedURL <url>`) and log each step.
-    private func runUpdateSelfTest(install: Bool) {
-        Updater.shared.check(manual: true)
-        var finished = false
-        Updater.shared.$state.sink { state in
-            vlog("update-selftest: \(state)")
-            guard !finished else { return }
-            switch state {
-            // @Published announces a change just before it is stored, so hop to the next turn before acting on it.
-            case .available: if install { finished = true; DispatchQueue.main.async { Updater.shared.install() } }
-            case .upToDate, .failed: finished = true; DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { NSApp.terminate(nil) }
-            default: break
-            }
-        }.store(in: &cancellables)
-    }
-
-    /// `--whisper-selftest` speaks a sentence, transcribes it with the engine inside the app, logs the result and quits.
-    private func runWhisperSelfTest() {
-        DispatchQueue.global().async {
-            let dir = FileManager.default.temporaryDirectory
-            let aiff = dir.appendingPathComponent("voicey-selftest.aiff").path, wav = dir.appendingPathComponent("voicey-selftest.wav").path
-            _ = Shell.run("/usr/bin/say", ["-o", aiff, "Voicey ships its own speech engine, so no Homebrew is needed."], timeout: 30)
-            _ = Shell.run("/usr/bin/afconvert", ["-f", "WAVE", "-d", "LEI16@16000", "-c", "1", aiff, wav], timeout: 30)
-            var samples: [Float] = []
-            if let data = try? Data(contentsOf: URL(fileURLWithPath: wav)) {
-                samples = data.dropFirst(44).withUnsafeBytes { Array($0.bindMemory(to: Int16.self)).map { Float($0) / 32768 } }
-            }
-            let started = Date()
-            let text = WhisperRunner.transcribe(samples, modelPath: ModelStore.shared.path(ModelStore.currentID), language: "en")
-            vlog("selftest: engine=\(WhisperRunner.cliPath() ?? "none") bundled=\(WhisperRunner.isBundled) time=\(String(format: "%.1f", Date().timeIntervalSince(started)))s text=\(text ?? "FAILED")")
-            DispatchQueue.main.async { NSApp.terminate(nil) }
-        }
-    }
-
-    /// `--overlay-demo` plays the pop-up through its stages without needing the mic.
-    private func runOverlayDemo() {
-        let words = "Hey this is a live preview of the dictation pop up showing words as you speak them".split(separator: " ")
-        overlay.show()
-        for i in words.indices {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 + Double(i) * 0.25) {
-                self.overlay.update(text: words[0...i].joined(separator: " "))
-                self.overlay.update(level: Float.random(in: 0.2...1))
-            }
-        }
-        let end = 0.6 + Double(words.count) * 0.25
-        DispatchQueue.main.asyncAfter(deadline: .now() + end) { self.overlay.set(.transcribing) }
-        DispatchQueue.main.asyncAfter(deadline: .now() + end + 1) { self.overlay.set(.polishing) }
-        DispatchQueue.main.asyncAfter(deadline: .now() + end + 2) { self.overlay.finish("Hey, this is a live preview of the dictation pop-up.", success: true) }
-    }
-
-    /// `--gesture-demo=double|single|hold` feeds a scripted key sequence through the real gesture code.
-    private func runGestureDemo(_ name: String) {
-        let steps: [(seconds: Double, isPress: Bool)]
-        switch name {
-        case "double": steps = [(1.0, true), (1.08, false), (1.3, true), (1.38, false), (4.0, true), (4.08, false)]
-        case "single": steps = [(1.0, true), (1.08, false), (3.0, true), (3.08, false)]
-        default: steps = [(1.0, true), (3.0, false)]                                  // hold for 2 s
-        }
-        vlog("gesture-demo: \(name)")
-        for step in steps {
-            DispatchQueue.main.asyncAfter(deadline: .now() + step.seconds) {
-                step.isPress ? self.hotKeyPressed() : self.hotKeyReleased()
-            }
-        }
     }
 }

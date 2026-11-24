@@ -12,5 +12,4 @@ for s in 16 32 128 256 512; do
   sips -z $((s*2)) $((s*2)) "$TMP/icon.png" --out "$SET/icon_${s}x${s}@2x.png" >/dev/null
 done
 iconutil -c icns "$SET" -o Resources/AppIcon.icns
-cp "$TMP/icon.png" Resources/icon-1024.png
 echo "Wrote Resources/AppIcon.icns"
