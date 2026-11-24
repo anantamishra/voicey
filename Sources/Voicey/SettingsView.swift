@@ -69,6 +69,7 @@ struct SettingsView: View {
     @ObservedObject private var tools = AIToolStore.shared
     @ObservedObject private var updater = Updater.shared
     @AppStorage(Prefs.autoUpdate) private var autoUpdate = true
+    @AppStorage(Prefs.showInDock) private var showInDock = true
     @AppStorage(Prefs.updateFeed) private var updateFeed = ""
     @AppStorage(Prefs.aiTool) private var aiTool = "claude"
     @AppStorage(Prefs.codexModel) private var codexModel = ""
@@ -301,6 +302,8 @@ struct SettingsView: View {
         DetailPage(title: "General") {
             Card {
                 SwitchRow(symbol: "power", title: "Open at login", isOn: $launchAtLogin)
+                Separator()
+                SwitchRow(symbol: "dock.rectangle", title: "Show Voicey in the Dock", isOn: $showInDock)
             }
             if !launchError.isEmpty { Footer(text: launchError).foregroundStyle(.red) }
             SectionHeader(text: "Updates")
@@ -362,6 +365,7 @@ struct SettingsView: View {
         }
         .frame(minWidth: 640, minHeight: 420)
         .onChange(of: mode) { _ in NotificationCenter.default.post(name: .voiceyHotKeyChanged, object: nil) }
+        .onChange(of: showInDock) { _ in AppPolicy.update(windowOpen: true) }
         .onChange(of: launchAtLogin) { on in
             do {
                 if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }

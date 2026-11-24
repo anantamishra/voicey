@@ -11,3 +11,5 @@ shown to people in the update prompt.
 - AI polish through Claude Code or Codex, with one-click install and a connection test.
 - Personal dictionary, per-app tone and snippets.
 - Floating live-text pop-up, copy-last-transcription menu item, sidebar settings and a first-run setup.
+- A regular Mac app (Dock icon, app switcher, standard menus) that also keeps a menu-bar icon. "Show in Dock" can be switched off.
+- In-app updates, a permanent test suite and a release script.

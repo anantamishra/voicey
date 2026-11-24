@@ -1,8 +1,19 @@
 import AppKit
 import SwiftUI
 
+/// Voicey is a regular Mac app (Dock icon, app switcher) unless "Show in Dock" is off, in which case it is
+/// menu-bar only and only shows a Dock icon while one of its windows is open.
+enum AppPolicy {
+    static func policy(showInDock: Bool, windowOpen: Bool) -> NSApplication.ActivationPolicy {
+        showInDock || windowOpen ? .regular : .accessory
+    }
+
+    static func update(windowOpen: Bool) {
+        NSApp.setActivationPolicy(policy(showInDock: Prefs.d.bool(forKey: Prefs.showInDock), windowOpen: windowOpen))
+    }
+}
+
 /// A translucent window with a transparent title bar that hosts a SwiftUI view.
-/// Voicey normally has no Dock icon, so it acts like a regular app while one of these is open.
 final class GlassWindowHost {
     private var window: NSWindow?
     private var closeObserver: Any?
@@ -27,7 +38,7 @@ final class GlassWindowHost {
 
     func show() {
         if window == nil { window = build() }
-        NSApp.setActivationPolicy(.regular)
+        AppPolicy.update(windowOpen: true)
         NSApp.activate(ignoringOtherApps: true)
         window?.makeKeyAndOrderFront(nil)
         window?.orderFrontRegardless()
@@ -65,7 +76,8 @@ final class GlassWindowHost {
             guard let self else { return }
             self.willClose()
             if !self.keepAfterClosing { self.window = nil }
-            NSApp.setActivationPolicy(.accessory)
+            // Another window (Settings and setup can both be open) keeps the Dock icon alive.
+            AppPolicy.update(windowOpen: NSApp.windows.contains { $0.isVisible && $0.canBecomeMain && $0 !== w })
         }
         return w
     }

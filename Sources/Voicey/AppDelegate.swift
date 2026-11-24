@@ -31,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ note: Notification) {
         Prefs.register()
+        buildMainMenu()
         buildMenu()
         setIcon(.idle)
         wireRecorder()
@@ -39,6 +40,66 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         showFirstRunScreens()
         runLaunchFlags()
     }
+
+    /// The standard Mac menu bar. Without an Edit menu, ⌘C / ⌘V would not work in Voicey's own text fields.
+    private func buildMainMenu() {
+        let name = "Voicey"
+        let main = NSMenu()
+
+        func add(_ title: String, to menu: NSMenu, _ action: Selector?, _ key: String = "", target: AnyObject? = nil,
+                 modifiers: NSEvent.ModifierFlags = .command) {
+            let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+            item.keyEquivalentModifierMask = modifiers
+            item.target = target
+            menu.addItem(item)
+        }
+        func submenu(_ title: String, fill: (NSMenu) -> Void) -> NSMenu {
+            let menu = NSMenu(title: title)
+            let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+            item.submenu = menu
+            main.addItem(item)
+            fill(menu)
+            return menu
+        }
+
+        _ = submenu(name) { m in
+            add("About \(name)", to: m, #selector(NSApplication.orderFrontStandardAboutPanel(_:)))
+            m.addItem(.separator())
+            add("Settings…", to: m, #selector(openSettings), ",", target: self)
+            add("Check for Updates…", to: m, #selector(updateAction), target: self)
+            m.addItem(.separator())
+            add("Hide \(name)", to: m, #selector(NSApplication.hide(_:)), "h")
+            add("Hide Others", to: m, #selector(NSApplication.hideOtherApplications(_:)), "h", modifiers: [.command, .option])
+            add("Show All", to: m, #selector(NSApplication.unhideAllApplications(_:)))
+            m.addItem(.separator())
+            add("Quit \(name)", to: m, #selector(NSApplication.terminate(_:)), "q")
+        }
+        _ = submenu("Edit") { m in
+            add("Undo", to: m, Selector(("undo:")), "z")
+            add("Redo", to: m, Selector(("redo:")), "z", modifiers: [.command, .shift])
+            m.addItem(.separator())
+            add("Cut", to: m, #selector(NSText.cut(_:)), "x")
+            add("Copy", to: m, #selector(NSText.copy(_:)), "c")
+            add("Paste", to: m, #selector(NSText.paste(_:)), "v")
+            add("Select All", to: m, #selector(NSText.selectAll(_:)), "a")
+        }
+        let windows = submenu("Window") { m in
+            add("Minimize", to: m, #selector(NSWindow.performMiniaturize(_:)), "m")
+            add("Zoom", to: m, #selector(NSWindow.performZoom(_:)))
+            add("Close", to: m, #selector(NSWindow.performClose(_:)), "w")
+        }
+        NSApp.mainMenu = main
+        NSApp.windowsMenu = windows
+    }
+
+    /// Clicking the Dock icon (or opening the app again) brings up Settings, like any regular Mac app.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag { SettingsWindow.shared.show() }
+        return true
+    }
+
+    /// Closing the last window must not quit: Voicey keeps listening for its shortcut.
+    func applicationShouldTerminateAfterLastWindowClosed(_ app: NSApplication) -> Bool { false }
 
     private func buildMenu() {
         [toggleItem, settingsItem, updateItem, copyItem].forEach { $0.target = self }

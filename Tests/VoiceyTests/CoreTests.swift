@@ -87,3 +87,12 @@ final class WhisperOutputTests: XCTestCase {
         XCTAssertEqual(WhisperRunner.cleanOutput(" First line.\n\n Second line.\n"), "First line. Second line.")
     }
 }
+
+final class AppPolicyTests: XCTestCase {
+    func testDockIconWhenWantedOrWhenAWindowIsOpen() {
+        XCTAssertEqual(AppPolicy.policy(showInDock: true, windowOpen: false), .regular)
+        XCTAssertEqual(AppPolicy.policy(showInDock: true, windowOpen: true), .regular)
+        XCTAssertEqual(AppPolicy.policy(showInDock: false, windowOpen: true), .regular, "a window needs a Dock icon to come to the front")
+        XCTAssertEqual(AppPolicy.policy(showInDock: false, windowOpen: false), .accessory)
+    }
+}

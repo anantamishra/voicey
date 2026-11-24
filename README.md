@@ -6,6 +6,7 @@ Dictate into any Mac app. Press a shortcut, talk, and Voicey types the polished 
 - **AI polish.** An AI tool you already have installed, Claude Code or Codex, fixes punctuation, filler words and misheard names. Only the transcript text is sent to it.
 - **One key, three gestures.** Hold to talk, press once to start and stop, or double-tap for hands-free. Any key works, including a single modifier such as `fn` or Right ⌥.
 - **Made for you.** A personal dictionary, a different tone per app (formal in Mail, casual in Slack) and snippets that expand a short phrase into saved text.
+- **A regular Mac app with a menu-bar icon.** It has a Dock icon (switch it off in Settings → General for menu-bar only) and keeps listening for your shortcut after you close its windows.
 - **Live pop-up** that shows your words as you speak, and a menu-bar item to copy the last transcription.
 - **First-run setup** that checks permissions, finds your AI tools (and can install them) and fetches the speech model.
 - **Updates from inside the app.** See [RELEASING.md](RELEASING.md).
