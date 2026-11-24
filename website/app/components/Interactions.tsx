@@ -13,6 +13,8 @@ const TIPS = [
   { text: "tip: say “my address” and a snippet pastes the full text, word for word.", icon: "✂️" },
   { text: "tip: pick a tone for each app, formal in mail and casual in messages.", icon: "🎨" },
   { text: "tip: lost the last thing you said? copy it again from the menu bar.", icon: "📋" },
+  { text: "tip: stop talking for a few seconds and voicey transcribes by itself.", icon: "⏱️" },
+  { text: "tip: turn on double clap in settings, then clap twice to start without a keyboard.", icon: "👏" },
 ];
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);

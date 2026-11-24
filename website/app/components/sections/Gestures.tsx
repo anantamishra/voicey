@@ -39,6 +39,34 @@ export default function Gestures() {
           </figcaption>
         </figure>
         <figure className="moment">
+          <div className="m-photo vp vp-5" aria-hidden="true">
+            <div className="vm">
+              <div className="clap">
+                <span>👏</span>
+                <span>👏</span>
+              </div>
+              <Pop kind="hands">Listening hands-free… pause to finish</Pop>
+            </div>
+          </div>
+          <figcaption>
+            <b>start with a double clap</b>
+            <span>no keyboard needed: clap twice and talk. it&rsquo;s off until you turn it on in settings.</span>
+          </figcaption>
+        </figure>
+        <figure className="moment">
+          <div className="m-photo vp vp-6" aria-hidden="true">
+            <div className="vm">
+              <Pop kind="live">send it to marcus by friday</Pop>
+              <span className="pause-note">3 quiet seconds</span>
+              <Pop kind="work">Transcribing…</Pop>
+            </div>
+          </div>
+          <figcaption>
+            <b>stops when you pause</b>
+            <span>finish talking and voicey transcribes by itself after a few quiet seconds. choose 2, 3 or 5, or never.</span>
+          </figcaption>
+        </figure>
+        <figure className="moment">
           <div className="m-photo vp vp-3" aria-hidden="true">
             <div className="vm vm-tone">
               <div className="tone-card">

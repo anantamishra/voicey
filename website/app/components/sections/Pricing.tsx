@@ -44,6 +44,10 @@ export default function Pricing() {
             <span>hold, tap or double-tap, with any key</span>
           </li>
           <li>
+            <MicrophoneIcon width="18" height="18" aria-hidden="true" />
+            <span>double clap to start, and it stops when you pause</span>
+          </li>
+          <li>
             <SparkleIcon width="18" height="18" aria-hidden="true" />
             <span>
               ai polish with{" "}

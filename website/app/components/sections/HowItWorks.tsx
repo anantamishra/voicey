@@ -91,8 +91,8 @@ export default function HowItWorks() {
           </li>
           <li>
             <span className="step-body">
-              <b>let go</b>
-              <span>the polished text lands at your cursor.</span>
+              <b>let go, or just stop talking</b>
+              <span>the polished text lands at your cursor. a few quiet seconds also finish it for you.</span>
             </span>
           </li>
         </ol>
@@ -116,6 +116,14 @@ export default function HowItWorks() {
               <li>
                 <KeyIcon {...ICON} />
                 any key as your shortcut, even fn
+              </li>
+              <li>
+                <SoundIcon {...ICON} />
+                double clap to start, no keyboard needed
+              </li>
+              <li>
+                <MicrophoneIcon {...ICON} />
+                stops and transcribes by itself when you pause
               </li>
               <li>
                 <SoundIcon {...ICON} />a live pop-up shows your words as you speak

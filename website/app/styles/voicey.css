@@ -85,12 +85,18 @@
   .v-scene .v-win.v-mail{width:90%}
 }
 
-/* ---------- the four feature cards ---------- */
+/* ---------- the feature cards ---------- */
 .m-photo.vp{display:grid;place-items:center;padding:0}
 .m-photo.vp-1{background:linear-gradient(135deg,#ffd9c7,#ffc2d1)}
 .m-photo.vp-2{background:linear-gradient(135deg,#d9ccff,#b9d7ff)}
 .m-photo.vp-3{background:linear-gradient(135deg,#ffe7a8,#ffc2a8)}
 .m-photo.vp-4{background:linear-gradient(135deg,#c9f2d4,#b9e4ff)}
+.m-photo.vp-5{background:linear-gradient(135deg,#ffd9f0,#ffc9c2)}
+.m-photo.vp-6{background:linear-gradient(135deg,#c2e9ff,#d6ccff)}
+.clap{display:flex;gap:6px;font-size:34px;line-height:1}
+.clap span:first-child{transform:rotate(-12deg)}
+.clap span:last-child{transform:rotate(12deg) scaleX(-1)}
+.pause-note{font-size:12px;font-weight:600;color:#6b6b70}
 .vm{display:grid;justify-items:center;gap:18px;width:100%;padding:0 16px}
 .vm .v-pop{max-width:100%}
 .vm-tone{grid-template-columns:1fr 1fr;align-items:stretch;gap:12px}
