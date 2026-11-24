@@ -7,7 +7,7 @@ export default function Faq() {
       <div className="faq">
         <details>
           <summary>what is voicey?</summary>
-          <p>a mac app that turns your voice into text, anywhere you can type. press a key, talk, and the polished text appears at your cursor, in mail, messages, notes, your editor, anywhere.</p>
+          <p>a mac app that turns your voice into text, anywhere you can type. press a key, talk, and the polished text appears at your cursor, in mail, messages, notes, your editor, anywhere. it lives in the menu bar, with an optional dock icon, and can open at login.</p>
         </details>
         <details>
           <summary>is my voice uploaded anywhere?</summary>
@@ -23,7 +23,7 @@ export default function Faq() {
         </details>
         <details>
           <summary>does it work offline?</summary>
-          <p>the speech-to-text part does, once the speech model has downloaded. ai polish needs whatever internet access your ai tool needs. if you turn polish off, voicey works fully offline.</p>
+          <p>the speech-to-text part does, once the speech model has downloaded. ai polish needs whatever internet access your ai tool needs. if you turn polish off, voicey works fully offline. silence is trimmed first, so pauses don’t slow it down.</p>
         </details>
         <details>
           <summary>which apps does it work in?</summary>
@@ -31,15 +31,7 @@ export default function Faq() {
         </details>
         <details>
           <summary>what’s the shortcut, and can i change it?</summary>
-          <p>the default is ⌃⌥ space. record any key you like in settings, even a single key such as fn, right ⌥ or an f-key. hold it to talk, press it once to start and again to stop, or double-tap it for hands-free dictation.</p>
-        </details>
-        <details>
-          <summary>can i start it without touching the keyboard?</summary>
-          <p>yes. turn on “double clap to start” in settings, then clap twice and talk. it’s off by default, because it keeps the microphone open to listen for claps (nothing is recorded or saved, and the orange mic dot stays on). a double clap starts hands-free dictation.</p>
-        </details>
-        <details>
-          <summary>does it stop by itself when i finish talking?</summary>
-          <p>yes. after you’ve spoken, a few quiet seconds (3 by default, or 2 or 5, or never) end the recording and voicey transcribes and pastes the text. you can still stop it any time with your shortcut or the menu.</p>
+          <p>the default is ⌃⌥ space. record any key you like in settings, even a single key such as fn, right ⌥ or an f-key. hold it to talk, press it once to start and again to stop, or double-tap it for hands-free dictation. you can also start with a double clap (off until you turn it on in settings, because it keeps the microphone open to listen), and voicey stops by itself after a few quiet seconds.</p>
         </details>
         <details>
           <summary>which languages does it understand?</summary>

@@ -20,7 +20,7 @@ export default function Gestures() {
           </div>
           <figcaption>
             <b>hold to talk</b>
-            <span>press and hold your shortcut, say it, let go. that&rsquo;s it.</span>
+            <span>press and hold your shortcut, say it, let go. that&rsquo;s it. any key works, even a single one like fn.</span>
           </figcaption>
         </figure>
         <figure className="moment">
@@ -29,13 +29,15 @@ export default function Gestures() {
               <div className="v-keys static">
                 <kbd className="wide">space</kbd>
                 <span className="tap">×2</span>
+                <span className="or">or</span>
+                <span className="clap-kbd" aria-hidden="true">👏👏</span>
               </div>
               <Pop kind="hands">Listening hands-free… press to stop</Pop>
             </div>
           </div>
           <figcaption>
             <b>double-tap for hands-free</b>
-            <span>keep talking without holding a key. press once more when you&rsquo;re done.</span>
+            <span>keep talking without holding a key. it stops when you pause for a few seconds, or press once more. a double clap can start it too.</span>
           </figcaption>
         </figure>
         <figure className="moment">
@@ -73,7 +75,7 @@ export default function Gestures() {
           </div>
           <figcaption>
             <b>your words, spelled right</b>
-            <span>add the names you say often. say a short phrase and it expands to the full text.</span>
+            <span>add the names you say often, and the speech engine and ai both use them. say a short phrase and it expands to the full text.</span>
           </figcaption>
         </figure>
       </div>

@@ -41,7 +41,7 @@ export default function Pricing() {
           </li>
           <li>
             <MicrophoneIcon width="18" height="18" aria-hidden="true" />
-            <span>hold, tap or double-tap, with any key</span>
+            <span>hold, tap, double-tap or clap, with any key</span>
           </li>
           <li>
             <SparkleIcon width="18" height="18" aria-hidden="true" />
