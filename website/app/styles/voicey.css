@@ -1,0 +1,177 @@
+/* Voicey-specific pieces: the dictation demo, the pop-up, keycaps and feature cards.
+   Everything else comes from site.css. */
+
+/* ---------- app window mock-ups ---------- */
+.v-win{background:#fff;border-radius:12px;box-shadow:0 0 0 .5px #0000002e,0 18px 44px #00000026;overflow:hidden;font-size:14px;color:#1d1d1f;text-align:left}
+.v-bar{display:flex;align-items:center;gap:12px;height:34px;padding:0 12px;background:#f6f6f7;border-bottom:.5px solid #0000001a}
+.v-bar b{font-size:12.5px;font-weight:600;margin:0 auto;transform:translateX(-24px)}
+.v-lights{display:flex;gap:7px}
+.v-lights i{width:11px;height:11px;border-radius:50%;background:#ff5f57}
+.v-lights i:nth-child(2){background:#febc2e}
+.v-lights i:nth-child(3){background:#28c840}
+.v-fields p{margin:0;padding:8px 14px;border-bottom:.5px solid #0000000f;font-size:13px}
+.v-fields span{color:#8a8a8e;margin-right:6px}
+.v-text{position:relative;padding:14px 16px;min-height:92px}
+.v-text p,.v-text h4{margin:0;line-height:1.55}
+.v-text h4{margin-bottom:8px;font-size:18px;letter-spacing:-.02em}
+.v-big{font-size:15px}
+.v-caret{display:inline-block;width:2px;height:1.15em;margin-left:2px;vertical-align:text-bottom;background:var(--accent);animation:v-blink 1s steps(1) infinite}
+.v-caret.light{background:#fff}
+@keyframes v-blink{50%{opacity:0}}
+
+.v-bubbles{display:grid;gap:8px;padding:14px}
+.v-bubbles p{margin:0;max-width:78%;padding:8px 12px;border-radius:16px;font-size:14px;line-height:1.4}
+.v-bubbles .them{justify-self:start;background:#ececee}
+.v-bubbles .me{justify-self:end;background:#0a84ff;color:#fff}
+.v-compose{margin:0 14px 14px;padding:10px 12px;border-radius:10px;border:1px solid #0000001f;font-size:14px;line-height:1.45}
+.v-compose.big{min-height:76px;font-size:15px}
+.v-code pre{margin:0;padding:16px;background:#1e1e22;color:#e6e6ea;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;min-height:118px}
+.v-code .c{color:#8b9099}
+.v-code .typed{color:#f3f3f5}
+.v-code .v-bar{background:#2a2a2f;color:#e6e6ea;border-color:#00000040}
+
+/* ---------- the Voicey pop-up ---------- */
+.v-pop{display:inline-flex;align-items:center;gap:10px;max-width:min(92%,560px);padding:10px 16px;border-radius:20px;background:#ffffffd9;-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);box-shadow:0 0 0 .5px #00000024,0 14px 34px #0000002e;font-size:14px;color:#1d1d1f;text-align:left}
+.v-pop-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v-meter{display:inline-flex;align-items:center;gap:3px;height:26px;flex:none}
+.v-meter i{width:4px;height:8px;border-radius:2px;background:#ff453a;animation:v-bars 1s ease-in-out infinite}
+.v-meter i:nth-child(2){animation-delay:.12s}
+.v-meter i:nth-child(3){animation-delay:.24s}
+.v-meter i:nth-child(4){animation-delay:.36s}
+.v-meter i:nth-child(5){animation-delay:.48s}
+@keyframes v-bars{0%,100%{height:6px}50%{height:22px}}
+.v-spin{flex:none;width:16px;height:16px;border-radius:50%;border:2px solid #0000001f;border-top-color:#1d1d1f;animation:v-spin .8s linear infinite}
+@keyframes v-spin{to{transform:rotate(360deg)}}
+.v-check{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#34c759;color:#fff;font-size:12px;font-weight:700}
+.v-lock{flex:none;color:#6e6e73}
+.v-at-bottom{position:absolute;left:50%;bottom:8%;transform:translateX(-50%)}
+
+/* ---------- keycaps ---------- */
+.v-keys{display:flex;align-items:center;gap:8px}
+.v-keys kbd{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border-radius:9px;background:#fff;box-shadow:0 0 0 .5px #0000002e,0 2px 0 #00000026;font:600 15px var(--font);color:#1d1d1f}
+.v-keys kbd.wide{min-width:76px}
+.v-keys kbd.down{transform:translateY(2px);background:#f0f0f2;box-shadow:0 0 0 .5px #0000002e}
+.v-keys>span{margin-left:8px;font-size:13px;color:#000000a3}
+.v-keys .tap{font-weight:700;color:var(--accent)}
+
+/* ---------- the scroll story ---------- */
+.v-scene{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:20px;background:linear-gradient(135deg,#ffd9c7 0%,#ffc2d1 48%,#d9ccff 100%)}
+.v-scene .v-win.v-mail{position:absolute;left:50%;top:9%;width:min(76%,600px);transform:translateX(-50%)}
+.v-scene .v-pop{position:absolute;left:50%;bottom:9%;transform:translate(-50%,14px);opacity:0;pointer-events:none;transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.v-scene .v-keys{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);transition:opacity .3s}
+.story:not([data-step="0"]) .v-keys{opacity:0}
+.story[data-step="1"] .v-s1,.story[data-step="2"] .v-s2,.story[data-step="3"] .v-s3{opacity:1;transform:translate(-50%,0)}
+.v-s1 .v-pop-text{clip-path:inset(0 100% 0 0)}
+.story[data-step="1"] .v-s1 .v-pop-text{animation:v-reveal 3s steps(56,end) forwards}
+@keyframes v-reveal{to{clip-path:inset(0 0 0 0)}}
+.v-typed{clip-path:inset(0 100% 0 0);transition:clip-path .2s}
+.story[data-step="3"] .v-typed{clip-path:inset(0 0 0 0);transition:clip-path 1.4s steps(48,end) .2s}
+.story:not([data-step="0"]) .v-scene .v-caret{opacity:1}
+
+.v-steps{display:flex;justify-content:center;flex-wrap:wrap;gap:6px clamp(10px,3vw,28px);margin:14px 0 0;padding:0;list-style:none;font-size:13px;color:var(--ink-3)}
+.v-steps li{display:flex;align-items:center;gap:7px;transition:color .25s}
+.v-steps b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--fill);color:var(--ink-2);font-size:11px;transition:background .25s,color .25s}
+.story[data-step="0"] .v-steps li:nth-child(1),.story[data-step="1"] .v-steps li:nth-child(2),.story[data-step="2"] .v-steps li:nth-child(3),.story[data-step="3"] .v-steps li:nth-child(4){color:var(--ink)}
+.story[data-step="0"] .v-steps li:nth-child(1) b,.story[data-step="1"] .v-steps li:nth-child(2) b,.story[data-step="2"] .v-steps li:nth-child(3) b,.story[data-step="3"] .v-steps li:nth-child(4) b{background:var(--accent);color:#fff}
+
+/* ---------- "built for every app" tabs ---------- */
+.ek .ek-stage{aspect-ratio:16/10;background:linear-gradient(135deg,#ffd9c7 0%,#ffc2d1 48%,#d9ccff 100%)}
+.ek .ek-scene{inset:0}
+.ek-scene .v-wide{position:absolute;left:50%;top:9%;width:min(80%,640px);transform:translateX(-50%)}
+@media (max-width:700px){
+  .ek .ek-stage{aspect-ratio:4/5}
+  .ek-scene .v-wide{width:90%}
+  .v-scene{aspect-ratio:4/5}
+  .v-scene .v-win.v-mail{width:90%}
+}
+
+/* ---------- the four feature cards ---------- */
+.m-photo.vp{display:grid;place-items:center;padding:0}
+.m-photo.vp-1{background:linear-gradient(135deg,#ffd9c7,#ffc2d1)}
+.m-photo.vp-2{background:linear-gradient(135deg,#d9ccff,#b9d7ff)}
+.m-photo.vp-3{background:linear-gradient(135deg,#ffe7a8,#ffc2a8)}
+.m-photo.vp-4{background:linear-gradient(135deg,#c9f2d4,#b9e4ff)}
+.vm{display:grid;justify-items:center;gap:18px;width:100%;padding:0 16px}
+.vm .v-pop{max-width:100%}
+.vm-tone{grid-template-columns:1fr 1fr;align-items:stretch;gap:12px}
+.tone-card{padding:12px;border-radius:12px;background:#fff;box-shadow:0 0 0 .5px #00000024,0 8px 22px #00000018;text-align:left}
+.tone-card p{margin:6px 0 0;font-size:13px;line-height:1.45}
+.tone-app{font-size:11px;font-weight:600;color:#8a8a8e}
+.vm-dict .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.vm-dict .chips span{padding:6px 12px;border-radius:999px;background:#fff;font-size:13px;box-shadow:0 0 0 .5px #00000024}
+.vm-dict .snip{margin:0;padding:10px 14px;border-radius:12px;background:#fff;font-size:13px;box-shadow:0 0 0 .5px #00000024,0 8px 22px #00000018}
+.vm-dict .snip span{padding:2px 8px;border-radius:6px;background:#ffe1e6;color:#b4234a;font-weight:600}
+.vm-dict .snip i{margin:0 4px;font-style:normal;color:var(--ink-3)}
+
+/* ---------- pain points, comparison, marquee, maker note ---------- */
+.scr-notif-app{overflow:hidden}
+.scr-notif-app img{width:100%;height:100%;display:block}
+.cmp.v3 .cmp-row{grid-template-columns:minmax(0,1.7fr) repeat(3,minmax(0,1fr))}
+.say-face{font-size:16px}
+.tip-face{background:var(--accent-tint)}
+.fn-face.v-face{display:grid;place-items:center;background:var(--accent);color:#fff}
+
+/* ---------- download ---------- */
+.v-install{display:flex;align-items:center;gap:10px;max-width:min(860px,100%);margin:var(--s-5) auto var(--s-2);padding:8px 8px 8px 16px;border-radius:12px;background:var(--surface);box-shadow:0 0 0 .5px #0000001f}
+.v-install code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;text-align:left;font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);scrollbar-width:none}
+.v-install code::-webkit-scrollbar{display:none}
+.v-copy{flex:none;height:32px;padding:0 14px;border:0;border-radius:8px;background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:500;cursor:pointer}
+.v-copy:hover{opacity:.85}
+
+/* ---------- fixes found while reviewing in the browser ---------- */
+.pain-logos{width:30px;justify-content:center;font-size:16px;line-height:1}
+.macbook .mb-screen{background:linear-gradient(135deg,#ffd9c7 0%,#ffc2d1 48%,#d9ccff 100%)}
+.orb{width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:14px}
+.orb img{width:40px;height:40px;border-radius:10px}
+
+/* pricing card header, alert icon, install command */
+.price-card:before{background:linear-gradient(135deg,#ffd9c7 0%,#ffc2d1 55%,#d9ccff 100%)}
+.price-mood img{border-radius:18px}
+.scr-alert-icon:before,.scr-alert-icon:after{display:none}
+.scr-alert-icon{width:5.4cqw;height:5.4cqw}
+.scr-alert-icon img{display:block;width:100%;height:100%}
+.v-install code{white-space:nowrap;overflow-x:auto;font-size:clamp(10px,1.5vw,12.5px)}
+
+/* small screens */
+@media (max-width:640px){
+  .proof{display:none}
+  .cmp.v3 .cmp-head .cmp-brand{white-space:normal;text-align:center;line-height:1.2;font-size:11px}
+}
+
+
+/* links inside running text */
+a.v-link{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1.5px}
+a.v-link:hover{color:var(--accent)}
+
+/* the closing lockup in the footer: "meet [logo] voicey." (same pieces as the hero title) */
+.foot-mark{margin:var(--s-8) auto var(--s-9);font-size:var(--t-3xl);font-weight:700;letter-spacing:-.045em;line-height:1.15;color:var(--ink);text-decoration:none}
+@media (max-width:640px){.foot-mark{font-size:var(--t-2xl);margin:var(--s-7) auto var(--s-8)}}
+.foot a.foot-mark{text-decoration:none}
+.foot-mark em{color:var(--accent)}
+
+/* the orbit is a loop around the demo: its far (top) half goes behind it, its near (bottom) half comes in front */
+.story .orbit-ring{clip-path:inset(0 0 50% 0)}
+.story .orbit-ring.front{clip-path:inset(50% 0 0 0);z-index:1}
+
+/* ---------- "how it works" notes ---------- */
+.note strong{color:var(--ink);font-weight:600}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-2)}
+.vs>div{padding:var(--s-4);border-radius:var(--radius);background:var(--surface);display:grid;align-content:start;gap:6px}
+.vs b{font-size:var(--t-xs);font-weight:600;color:var(--ink-3)}
+.vs p{margin:0;font-size:var(--t-sm);line-height:1.5}
+.vs .us{background:#fff3f5;box-shadow:inset 0 0 0 1px #e8365d40}
+.vs .us b{color:var(--accent)}
+.vs .us p{color:var(--ink)}
+.how-steps{gap:var(--s-4)}
+.how-steps li{align-items:flex-start}
+.how-steps li:before{padding-top:3px}
+.step-body{display:grid;gap:2px}
+.step-body b{color:var(--ink);font-weight:600}
+.step-body kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-right:2px;padding:0 6px;border-radius:6px;background:var(--surface);box-shadow:0 0 0 .5px #00000026,0 1px 0 #0000001f;font:600 12px var(--font);color:var(--ink);vertical-align:1px}
+.note-foot{margin:0;font-size:var(--t-xs);color:var(--ink-3)}
+.feature-groups{display:grid;gap:var(--s-3)}
+.fg{padding:var(--s-4) var(--s-5);border-radius:var(--radius);background:var(--surface)}
+.fg-head{margin:0 0 var(--s-3);font-size:var(--t-xs);font-weight:600;color:var(--ink-3)}
+@media (max-width:560px){
+  .vs{grid-template-columns:1fr}
+}

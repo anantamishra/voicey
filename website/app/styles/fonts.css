@@ -1,0 +1,6 @@
+@font-face{font-family:Inter;font-style:normal;font-weight:100 900;font-display:swap;src:url(./fonts/inter-latin.woff2) format("woff2")}
+@font-face{font-family:Inter Fallback;src:local(Arial);ascent-override:90.44%;descent-override:22.52%;line-gap-override:0.0%;size-adjust:107.12%}
+@font-face{font-family:Caveat;font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/caveat-latin.woff2) format("woff2")}
+@font-face{font-family:Caveat Fallback;src:local(Arial);ascent-override:124.77%;descent-override:38.99%;line-gap-override:0.0%;size-adjust:76.94%}
+.inter_5901b7c6-module__ec5Qua__variable{--font-inter:"Inter","Inter Fallback"}
+.caveat_954b711f-module__ahyxHq__className{font-family:Caveat,Caveat Fallback;font-style:normal;font-weight:600}

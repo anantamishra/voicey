@@ -152,6 +152,7 @@ Release settings (where the zip is hosted, and the Developer ID certificate and 
 | `Sources/Voicey` | the app |
 | `Tests/VoiceyTests` | unit tests for gestures, updates, dictionary, snippets, shortcuts and more |
 | `tools/` | icon generation, Whisper bundling, release script |
+| `website/` | the website, live at [anantamishra.github.io/voicey](https://anantamishra.github.io/voicey/) |
 | `install.sh` | the Terminal installer |
 | `LICENSE`, `THIRD_PARTY_NOTICES.md`, `Resources/licenses/` | Voicey's license and the licenses of what it bundles |
 

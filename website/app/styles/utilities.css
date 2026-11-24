@@ -1,0 +1,10 @@
+/* Styles extracted from former inline style attributes.
+   Rules are !important to keep the precedence inline styles had,except for
+   elements whose styles the page script overwrites at runtime (orbs, price slider,
+   Finder cursor scene),which stay normal-priority so the script can still win. */
+
+/* Footer */
+.u-5422e1{margin-top:12px !important}.u-56a469{display:contents !important}/* FinderStory */
+.u-ba51e2{transform:translate(-5.31924px, 366.806px) scale(0.861179);z-index:-1}.u-c148a2{transform:translate(466.473px, 236.003px) scale(0.800357);z-index:-1}.u-fe639d{transform:translate(901.681px, 292.922px) scale(0.877239);z-index:-1}.u-ef9cd4{transform:translate(698.861px, 458.903px) scale(0.985576);z-index:2}.u-891731{transform:translate(138.304px, 504.566px) scale(0.97565);z-index:2}/* LovedByMacPeople */
+.u-ba5818{--says-time:56s !important}/* Sound toggle (created by the interaction script) */
+.sound-toggle{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:38;font:inherit;font-size:12px;color:var(--ink-2);background:var(--surface);border:1px solid #0000000f;border-radius:999px;padding:5px 12px;cursor:pointer}
