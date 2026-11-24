@@ -13,6 +13,7 @@
 - **AI polish.** An AI tool you already have, Claude Code or Codex, fixes punctuation, filler words and misheard names. Only the transcript text is sent to it.
 - **One key, three gestures.** Hold to talk, press once to start and stop, or double-tap for hands-free. Any key works, including a single modifier such as `fn` or Right ⌥.
 - **Made for you.** A personal dictionary, a different tone per app (formal in Mail, casual in Slack) and snippets that expand a short phrase into saved text.
+- **Hands-free options.** Double clap to start (off by default), and Voicey stops and transcribes by itself after a few quiet seconds.
 - **Live pop-up** that shows your words as you speak.
 - **A regular Mac app with a menu-bar icon.** It has a Dock icon (optional) and keeps listening for your shortcut after you close its windows.
 - **First-run setup** that checks permissions, finds your AI tools (and can install them) and downloads the speech model.
@@ -77,6 +78,14 @@ The default shortcut is **⌃⌥ Space**. You can record any other key in **Sett
 When you stop, Voicey transcribes, polishes the text and pastes it into the app you were using.
 A floating pop-up shows your words, then "Transcribing…" and "Polishing…" while it works.
 
+### Hands-free
+
+- **Stop after a pause.** Once you have spoken, 3 quiet seconds (or 2, 5, or never: **Settings → Dictation**) stop the recording and
+  transcribe it. If you say nothing at all, it gives up after 8 seconds.
+- **Double clap to start** (off by default). Clap twice, about a third of a second apart, and Voicey starts a hands-free dictation.
+  It keeps the microphone open to listen for claps, so the orange mic dot stays on; nothing is recorded or saved. Press your
+  shortcut or use the menu to stop, or just pause.
+
 ### The menu-bar menu
 
 Start or stop dictation, open **Settings**, **Check for Updates**, and **Copy Last Transcription** (⇧⌘C) if you want the
@@ -86,7 +95,7 @@ last text again.
 
 | Page | What you can change |
 |---|---|
-| **Dictation** | Shortcut (any key, including a single modifier), mode, language, live pop-up, paste at cursor |
+| **Dictation** | Shortcut (any key, including a single modifier), mode, language, live pop-up, paste at cursor, stop after a pause, double clap to start |
 | **Recognition** | Whisper or Apple's recognizer, which Whisper model, silence trimming |
 | **AI polish** | Which tool and model, a connection test, extra instructions such as "formal tone" |
 | **Dictionary** | Names and terms to spell correctly, shared with Whisper, Apple's recognizer and the AI tool |
