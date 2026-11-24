@@ -5,6 +5,12 @@
 # Usage: bundle_whisper.sh <App.app>
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+# Sign with the Developer ID identity (hardened runtime) when build.sh provides one, otherwise ad-hoc.
+sign() {
+  if [ -n "${SIGN_IDENTITY:-}" ]; then codesign --force --options runtime --timestamp --sign "$SIGN_IDENTITY" "$1"
+  else codesign --force --sign - "$1"; fi
+}
 APP="$1"
 DEST="$APP/Contents/Resources/whisper"
 rm -rf "$DEST"
@@ -13,7 +19,7 @@ if [ -x build/whisper/whisper-cli ]; then
   mkdir -p "$DEST"
   cp build/whisper/whisper-cli "$DEST/whisper-cli"
   [ -f build/whisper/LICENSE ] && cp build/whisper/LICENSE "$DEST/LICENSE-whisper.cpp"
-  codesign --force --sign - "$DEST/whisper-cli"
+  sign "$DEST/whisper-cli"
   echo "bundled portable whisper-cli"
   exit 0
 fi
@@ -64,7 +70,7 @@ while [ ${#queue} -gt 0 ]; do
   install_name_tool -add_rpath "@loader_path" "$f"
 done
 
-for f in "$DEST"/*(.); do codesign --force --sign - "$f" 2>/dev/null; done
+for f in "$DEST"/*(.); do sign "$f" 2>/dev/null; done
 [ -f "$CELLAR/LICENSE" ] && cp "$CELLAR/LICENSE" "$DEST/LICENSE-whisper.cpp"
 [ -f "$GGML/LICENSE" ] && cp "$GGML/LICENSE" "$DEST/LICENSE-ggml"
 for l in "$LIBOMP"/LICENSE*(N); do cp "$l" "$DEST/LICENSE-libomp"; done

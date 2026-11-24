@@ -63,3 +63,14 @@ final class UpdaterTests: XCTestCase {
                              "a feed without a checksum must be rejected")
     }
 }
+
+final class TeamIdentifierTests: XCTestCase {
+    func testDeveloperIDBuildHasATeam() {
+        XCTAssertEqual(Updater.parseTeamIdentifier("Identifier=local.voicey.app\nFormat=app bundle\nTeamIdentifier=ABCDE12345\n"), "ABCDE12345")
+    }
+
+    func testAdHocBuildHasNoTeam() {
+        XCTAssertNil(Updater.parseTeamIdentifier("Identifier=local.voicey.app\nSignature=adhoc\nTeamIdentifier=not set\n"))
+        XCTAssertNil(Updater.parseTeamIdentifier("nothing useful here"))
+    }
+}

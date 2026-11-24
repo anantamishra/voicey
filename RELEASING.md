@@ -12,6 +12,23 @@ The version lives in one place: the `VERSION` file. `build.sh` stamps it into th
    - GitHub Releases example: `FEED_URL=https://github.com/<you>/<repo>/releases/latest/download/update.json`
      and `DOWNLOAD_BASE=https://github.com/<you>/<repo>/releases/latest/download`.
 
+## Signing and notarizing (removes the "Apple could not verify" warning)
+
+You need an Apple Developer Program membership and a **Developer ID Application** certificate (not "Apple Development").
+
+1. Create the certificate: Xcode → Settings → Accounts → your team → Manage Certificates → **+** → *Developer ID Application*.
+   (Only the Account Holder or an Admin can.) Check it is in your keychain: `security find-identity -v -p codesigning`.
+2. Create an app-specific password at <https://account.apple.com> → Sign-In and Security, then store a notarization login once:
+
+       xcrun notarytool store-credentials voicey-notary --apple-id YOU@EXAMPLE.COM --team-id YOURTEAMID
+
+   (It prompts for the app-specific password, so it never lands in a file or in your shell history.)
+3. In `tools/release.conf` set `SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"` and `NOTARY_PROFILE="voicey-notary"`.
+
+`tools/release.sh` then signs with the hardened runtime, submits the app to Apple, waits, staples the ticket and checks it
+with `spctl`. Switching from the ad-hoc signature to a Developer ID one makes macOS ask for Microphone / Accessibility once
+more. Updates are only accepted from the same Team ID as the running copy.
+
 ## Cutting a release
 
 1. Add a `## X.Y.Z - date` section to `CHANGELOG.md`. Its text is what people see as “What’s new”.

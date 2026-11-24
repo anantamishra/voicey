@@ -36,6 +36,23 @@ echo "$NEW" > VERSION
 export BUILD_NUMBER=$(date +%Y%m%d%H%M)
 ./build.sh
 
+# Notarize (needs a Developer ID build): Apple scans the app, then the ticket is stapled onto it so it opens offline.
+if [ -n "${NOTARY_PROFILE:-}" ]; then
+  [ -n "${SIGN_IDENTITY:-}" ] || { echo "NOTARY_PROFILE is set but SIGN_IDENTITY is not. Only Developer ID builds can be notarized."; exit 1; }
+  echo "Sending to Apple for notarization (usually a few minutes)..."
+  ditto -c -k --keepParent build/Voicey.app build/notarize.zip
+  if ! xcrun notarytool submit build/notarize.zip --keychain-profile "$NOTARY_PROFILE" --wait 2>&1 | tee build/notarize.log | tail -4 | grep -q "status: Accepted"; then
+    echo "Notarization was not accepted. Details:"; cat build/notarize.log | tail -20; exit 1
+  fi
+  xcrun stapler staple build/Voicey.app
+  spctl --assess --type execute -vv build/Voicey.app 2>&1 | head -3
+  rm -f build/notarize.zip
+elif [ -n "${SIGN_IDENTITY:-}" ]; then
+  echo "Warning: signed with Developer ID but NOTARY_PROFILE is not set, so macOS will still warn on first launch."
+else
+  echo "Warning: not signed with a Developer ID, so macOS will warn on first launch."
+fi
+
 mkdir -p dist
 ZIP="dist/Voicey-$NEW.zip"
 rm -f "$ZIP"

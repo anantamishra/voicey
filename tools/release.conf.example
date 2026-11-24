@@ -1,5 +1,10 @@
 # Copy to tools/release.conf and fill in. Both are used by build.sh and release.sh.
 
+# Signing and notarization (needs a "Developer ID Application" certificate from your Apple Developer account).
+# Without these the app is ad-hoc signed and macOS shows an "Apple could not verify" warning on first launch.
+# SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"     # see: security find-identity -v -p codesigning
+# NOTARY_PROFILE="voicey-notary"                                    # made once with: xcrun notarytool store-credentials voicey-notary
+
 # Where the zip will be hosted (no trailing slash). release.sh writes this into update.json.
 DOWNLOAD_BASE="https://example.com/voicey"
 

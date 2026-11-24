@@ -167,6 +167,19 @@ final class Updater: NSObject, ObservableObject {
 
     struct UpdateError: Error { let message: String }
 
+    /// The Apple Team ID an app is signed with, or nil for ad-hoc / unsigned apps.
+    static func teamIdentifier(of app: URL) -> String? {
+        parseTeamIdentifier(Shell.run("/usr/bin/codesign", ["-dv", app.path], timeout: 20).err)
+    }
+
+    static func parseTeamIdentifier(_ codesignOutput: String) -> String? {
+        for line in codesignOutput.split(whereSeparator: \.isNewline) where line.hasPrefix("TeamIdentifier=") {
+            let value = line.dropFirst("TeamIdentifier=".count).trimmingCharacters(in: .whitespaces)
+            return value == "not set" || value.isEmpty ? nil : value
+        }
+        return nil
+    }
+
     private func verifyAndStage(zip: URL, work: URL, info: UpdateInfo, destination: URL) throws {
         // 1. the file is exactly what the feed promised
         let digest = SHA256.hash(data: try Data(contentsOf: zip)).map { String(format: "%02x", $0) }.joined()
@@ -184,6 +197,10 @@ final class Updater: NSObject, ObservableObject {
         let newVersion = bundle?.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         guard let nv = AppVersion(newVersion), let cv = AppVersion(Self.currentVersion), nv > cv, newVersion == info.version else {
             throw UpdateError(message: "The update’s version (\(newVersion)) isn’t what the feed said.")
+        }
+        // If this copy is signed by an Apple team, the update must come from the same team.
+        if let ours = Self.teamIdentifier(of: Bundle.main.bundleURL), Self.teamIdentifier(of: newApp) != ours {
+            throw UpdateError(message: "The update wasn’t signed by the same developer, so it was discarded.")
         }
         guard Shell.run("/usr/bin/codesign", ["--verify", "--deep", "--strict", newApp.path], timeout: 60).code == 0 else {
             throw UpdateError(message: "The update’s signature is damaged, so it was discarded.")
