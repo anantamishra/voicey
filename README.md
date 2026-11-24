@@ -24,6 +24,10 @@ macOS 13 or later on Apple silicon, with Xcode or the Command Line Tools to buil
 (`brew install whisper-cpp`); `tools/build_whisper.sh` compiles a portable copy instead. Without either, Voicey
 falls back to Apple's recognizer.
 
+If you downloaded a release, macOS will say it "could not verify Voicey is free of malware" the first time, because
+the app is not notarized yet. Open **System Settings → Privacy & Security** and click **Open Anyway** (or run
+`xattr -dr com.apple.quarantine /Applications/Voicey.app`). You only need to do this once.
+
 The first launch opens a setup screen that asks for Microphone, Speech Recognition and Accessibility access.
 Accessibility is what lets Voicey paste at your cursor.
 
