@@ -57,6 +57,7 @@ mkdir -p dist
 ZIP="dist/Voicey-$NEW.zip"
 rm -f "$ZIP"
 ditto -c -k --keepParent build/Voicey.app "$ZIP"
+cp "$ZIP" dist/Voicey.zip      # same file under a fixed name, so releases/latest/download/Voicey.zip always works
 SHA=$(shasum -a 256 "$ZIP" | awk '{print $1}')
 BASE="${DOWNLOAD_BASE:-https://example.com/voicey}"
 
@@ -70,5 +71,6 @@ PY
 echo
 echo "Released $NEW (build $BUILD_NUMBER)"
 echo "  $ZIP   sha256 $SHA"
+echo "  dist/Voicey.zip   (same file, fixed name for a permanent download link)"
 echo "  dist/update.json"
-echo "Upload both to: $BASE/  (the app reads ${FEED_URL:-the update feed URL set in Settings})"
+echo "Upload all three to: $BASE/  (the app reads ${FEED_URL:-the update feed URL set in Settings})"

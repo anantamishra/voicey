@@ -41,7 +41,8 @@ bash install.sh
 
 ### Manual install
 
-1. Download `Voicey-<version>.zip` from the [latest release](https://github.com/anantamishra/voicey/releases/latest) and unzip it.
+1. Download [`Voicey.zip`](https://github.com/anantamishra/voicey/releases/latest/download/Voicey.zip) (always the latest
+   version, or pick one from the [releases page](https://github.com/anantamishra/voicey/releases)) and unzip it.
 2. Drag **Voicey.app** into your **Applications** folder.
 3. Open it. macOS will say it *"could not verify Voicey is free of malware"*, because the app is not notarized by Apple yet.
    Click **Done**, then open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**.

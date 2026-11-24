@@ -33,7 +33,9 @@ more. Updates are only accepted from the same Team ID as the running copy.
 
 1. Add a `## X.Y.Z - date` section to `CHANGELOG.md`. Its text is what people see as “What’s new”.
 2. `tools/release.sh patch` (or `minor`, `major`, or an explicit `X.Y.Z`). It runs the test suite (`swift test`) first and stops if anything fails.
-3. Upload `dist/Voicey-X.Y.Z.zip` and `dist/update.json` to the places from step 1.
+3. Upload `dist/Voicey-X.Y.Z.zip`, `dist/Voicey.zip` and `dist/update.json` to the places from step 1.
+   `Voicey.zip` is the same file under a fixed name, so `…/releases/latest/download/Voicey.zip` is a download link that
+   never changes. On GitHub: `gh release create vX.Y.Z dist/Voicey-X.Y.Z.zip dist/Voicey.zip dist/update.json`.
 
 Running copies of Voicey notice the new `update.json` within a day (or right away via
 **menu bar → Check for Updates…**), download the zip, verify its SHA-256 and code signature,
