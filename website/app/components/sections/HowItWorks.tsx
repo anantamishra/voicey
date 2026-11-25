@@ -92,7 +92,7 @@ export default function HowItWorks() {
           <li>
             <span className="step-body">
               <b>let go</b>
-              <span>the polished text lands at your cursor. pause for a few seconds and it finishes for you.</span>
+              <span>the polished text lands at your cursor, usually within a few seconds. pause for a few seconds and it finishes for you.</span>
             </span>
           </li>
         </ol>
@@ -134,10 +134,10 @@ export default function HowItWorks() {
                 ai polish with claude code or codex, plus your own instructions
               </li>
               <li>
-                <DocumentIcon {...ICON} />a personal dictionary for names and jargon
+                <DocumentIcon {...ICON} />a personal dictionary for names and jargon, with suggestions
               </li>
               <li>
-                <PaletteIcon {...ICON} />a different tone for each app
+                <PaletteIcon {...ICON} />a different tone for each app, suggested as you go
               </li>
               <li>
                 <TextIcon {...ICON} />

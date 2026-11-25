@@ -60,7 +60,7 @@ export default function Pricing() {
           </li>
           <li>
             <DocumentIcon width="18" height="18" aria-hidden="true" />
-            <span>a personal dictionary, snippets and per-app tone</span>
+            <span>a personal dictionary, snippets and per-app tone, with suggestions</span>
           </li>
           <li>
             <SoundIcon width="18" height="18" aria-hidden="true" />

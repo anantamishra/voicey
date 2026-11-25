@@ -25,6 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var gesture = GestureMachine()
     private var graceWork: DispatchWorkItem?
     private let clapListener = ClapListener()
+    private var stopAt = Date(), heardAt = Date(), lastRaw = ""     // for the timing line in the log
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -32,6 +33,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ note: Notification) {
         Prefs.register()
+        scrubOldLogOnce()
         buildMainMenu()
         buildMenu()
         setIcon(.idle)
@@ -298,6 +300,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         endGestureState()
         recording = false
         busy = true
+        stopAt = Date()
         setIcon(.working)
         toggleItem.title = "Working…"
         recorder.stop()
@@ -326,13 +329,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Raw transcript in, pasted text out: snippets are set aside, the AI tool polishes the rest, snippets go back in.
     private func finished(_ raw: String) {
         let personal = Personalization.shared
+        guard TextPolisher.hasRealWords(raw) else { return deliver("") }
+        heardAt = Date(); lastRaw = raw
         let prepared = personal.protect(raw)
         if prepared.onlySnippets || !Prefs.d.bool(forKey: Prefs.polish) || prepared.text.isEmpty {
             return deliver(personal.expand(prepared.text, prepared))
         }
+        let tone = personal.tone(forBundleID: targetApp?.bundleIdentifier)
+        if TextPolisher.canSkipAI(prepared.text, tone: tone?.prompt) {
+            vlog("polish skipped: short and already clean")
+            return deliver(personal.expand(prepared.text, prepared))
+        }
         setStatus("\(TextPolisher.displayName) is polishing…")
         overlay.set(.polishing)
-        let tone = personal.tone(forBundleID: targetApp?.bundleIdentifier)
         vlog("polish: app=\(targetApp?.localizedName ?? "?") tone=\(tone?.prompt ?? "none")")
         TextPolisher.clean(prepared.text, appName: tone?.appName ?? targetApp?.localizedName, tone: tone?.prompt) { [weak self] cleaned in
             // If the tool dropped a placeholder, use the unpolished text rather than lose a snippet.
@@ -346,12 +355,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             setStatus("Nothing heard")
         } else {
             Paster.paste(text)
+            Learning.shared.record(raw: lastRaw, final: text, app: targetApp)
+            Learning.shared.watchEdits(of: text)
             lastTranscript = text
             Prefs.d.set(text, forKey: Prefs.lastTranscript)
             copyItem.isEnabled = true
             setStatus("Ready")
         }
         overlay.finish(text.isEmpty ? "Nothing heard" : text, success: !text.isEmpty)
+        let now = Date()
+        vlog(String(format: "timing: transcribe %.1fs, polish %.1fs, total %.1fs", heardAt.timeIntervalSince(stopAt), now.timeIntervalSince(heardAt),
+                    now.timeIntervalSince(stopAt)))
         busy = false
         setIcon(.idle)
         toggleItem.title = idleTitle

@@ -31,14 +31,38 @@ enum TextPolisher {
     }
 
     /// Rejects replies that look like an answer rather than an edit of the input.
-    static func looksLikeEdit(_ out: String, of raw: String) -> Bool {
-        out.count <= raw.count * 3 / 2 + 20 && !out.contains("<transcript>")
+    /// With the user's own instructions the output may legitimately grow (a sign-off, a list), so allow more room.
+    static func looksLikeEdit(_ out: String, of raw: String, hasInstructions: Bool = false) -> Bool {
+        let limit = hasInstructions ? raw.count * 3 + 120 : raw.count * 3 / 2 + 20
+        return out.count <= limit && !out.contains("<transcript>")
     }
+
+    /// False when the transcript is only filler sounds ("um uh"), so rules like a sign-off don't produce text from nothing.
+    static func hasRealWords(_ raw: String) -> Bool {
+        let fillers: Set<String> = ["um", "uh", "umm", "uhh", "er", "erm", "ah", "ahh", "hmm", "hm", "mm", "mhm", "oh"]
+        let words = raw.lowercased().split { !$0.isLetter && $0 != "[" && $0 != "]" }.map(String.init)
+        return words.contains { !fillers.contains($0) }
+    }
+
+    /// A short sentence that Whisper already punctuated and that has no filler needs no AI round trip (about 2 s saved).
+    /// Anything that depends on the AI (your rules, an app tone, snippets) always goes through it.
+    static func canSkipAI(_ raw: String, tone: String?) -> Bool {
+        guard Prefs.d.bool(forKey: Prefs.skipShortAI), extraInstructions.isEmpty, (tone ?? "").isEmpty, !raw.contains("[[SNIPPET") else { return false }
+        let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let first = text.first, first.isUppercase || !first.isLetter, let last = text.last, ".?!".contains(last) else { return false }
+        let words = CorrectionDiff.words(text.lowercased())
+        let fillers: Set<String> = ["um", "uh", "umm", "uhh", "er", "erm", "ah", "hmm", "like", "basically", "actually", "literally", "so", "well", "i mean"]
+        return words.count <= 10 && !words.contains(where: fillers.contains) && !text.dropLast().contains(where: { ".?!".contains($0) })
+    }
+
+    static var extraInstructions: String { (Prefs.d.string(forKey: Prefs.extra) ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
 
     static func prompts(raw: String, appName: String?, tone: String?) -> (system: String, user: String) {
         var system = systemPrompt
-        let extra = (Prefs.d.string(forKey: Prefs.extra) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if !extra.isEmpty { system += "\n\nAdditional style instructions from the user (apply them to the text):\n" + extra }
+        let extra = extraInstructions
+        if !extra.isEmpty {
+            system += "\n\nThe user\u{2019}s own rules for the final text. Always apply them, even when they add words (such as a sign-off), change the language or change the layout; they take priority over keeping the speaker\u{2019}s exact wording. Still remove filler words and fix mistakes, and never mention the rules or add labels or comments about them:\n" + extra
+        }
         let terms = Personalization.terms
         if !terms.isEmpty {
             system += "\n\nThe speaker\u{2019}s personal dictionary. If a word sounds like one of these, spell it exactly like this:\n" + terms.joined(separator: ", ")
@@ -50,7 +74,8 @@ enum TextPolisher {
             system += "\n\nPlaceholders like [[SNIPPET1]] stand for saved text. Keep each placeholder exactly as written, once, in its place."
         }
         let style = (tone ?? "").isEmpty ? "" : " Then rewrite it in this style for \(appName ?? "the app") (rephrase freely, keep the meaning): \(tone ?? "")."
-        let user = "Clean up this dictated transcript.\(style) Output only the final text.\n\n<transcript>\n\(raw)\n</transcript>"
+        let rules = extra.isEmpty ? "" : " Finally apply these rules from the user to the final text. They may add words, change the language or change the layout, and they take priority over keeping the exact wording. Do not add greetings, names or anything else the rules do not ask for, and keep the speaker\u{2019}s meaning. If the transcript has no real words (only fillers like um or uh), output nothing at all: \(extra)"
+        let user = "Clean up this dictated transcript.\(style)\(rules) Output only the final text, with no labels or comments.\n\n<transcript>\n\(raw)\n</transcript>"
         return (system, user)
     }
 
@@ -60,8 +85,12 @@ enum TextPolisher {
         let both = system + "\n\n" + user
         switch tool {
         case .claude:
-            let r = Shell.run(bin, ["-p", "--model", model, "--tools", "", "--no-session-persistence", "--system-prompt", system],
-                              input: user, timeout: 30)
+            // Not loading your MCP servers and slash commands cuts the start-up from about 5 s to about 2 s.
+            let base = ["-p", "--model", model, "--tools", "", "--no-session-persistence", "--system-prompt", system]
+            var r = Shell.run(bin, base + ["--strict-mcp-config", "--disable-slash-commands"], input: user, timeout: 30)
+            if r.code != 0, r.err.lowercased().contains("unknown option") || r.err.lowercased().contains("unrecognized") {
+                r = Shell.run(bin, base, input: user, timeout: 30)       // an older Claude Code without those flags
+            }
             return finish(r.code, r.out, r.err)
         case .codex:
             let file = FileManager.default.temporaryDirectory.appendingPathComponent("voicey-codex-\(UUID().uuidString).txt")
@@ -91,8 +120,8 @@ enum TextPolisher {
         let p = prompts(raw: raw, appName: appName, tone: tone)
         DispatchQueue.global(qos: .userInitiated).async {
             let r = execute(tool: t, model: m, system: p.system, user: p.user)
-            let ok = r.ok && looksLikeEdit(r.text, of: raw)
-            vlog("polish[\(t.rawValue)/\(m.isEmpty ? "default" : m)]: ok=\(ok) \(r.ok ? r.text : r.error)")
+            let ok = r.ok && looksLikeEdit(r.text, of: raw, hasInstructions: !extraInstructions.isEmpty)
+            vlog("polish[\(t.rawValue)/\(m.isEmpty ? "default" : m)]: ok=\(ok) in=\(raw.count) out=\(r.text.count) chars" + (r.ok ? "" : " error=\(r.error)"))
             DispatchQueue.main.async { completion(ok ? r.text : raw) }
         }
     }

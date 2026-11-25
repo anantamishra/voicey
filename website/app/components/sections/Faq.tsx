@@ -11,11 +11,11 @@ export default function Faq() {
         </details>
         <details>
           <summary>is my voice uploaded anywhere?</summary>
-          <p>no. your speech is turned into text on your mac, with whisper, or with apple’s own recognizer if you prefer. the audio never leaves your computer.</p>
+          <p>no. your speech is turned into text on your mac, with whisper, or with apple’s own recognizer if you prefer. the audio never leaves your computer. the activity log holds only timings and counts, never what you said, and if you turn on learning, voicey keeps just candidate words and suggests them for you to approve.</p>
         </details>
         <details>
           <summary>what does the ai polish do, and do i need it?</summary>
-          <p>it fixes punctuation and filler words like “um”, corrects misheard names using your dictionary, and can match the tone of the app you’re in. it’s optional. turn it off and you get the plain transcript, and nothing at all is sent anywhere.</p>
+          <p>it fixes punctuation and filler words like “um”, corrects misheard names using your dictionary, and can match the tone of the app you’re in. it’s optional. turn it off and you get the plain transcript, and nothing at all is sent anywhere. short, clean sentences skip it, so they paste straight away.</p>
         </details>
         <details>
           <summary>which ai tools does it use?</summary>
