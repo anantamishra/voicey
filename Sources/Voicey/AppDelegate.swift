@@ -326,6 +326,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Raw transcript in, pasted text out: snippets are set aside, the AI tool polishes the rest, snippets go back in.
     private func finished(_ raw: String) {
         let personal = Personalization.shared
+        guard TextPolisher.hasRealWords(raw) else { return deliver("") }
         let prepared = personal.protect(raw)
         if prepared.onlySnippets || !Prefs.d.bool(forKey: Prefs.polish) || prepared.text.isEmpty {
             return deliver(personal.expand(prepared.text, prepared))

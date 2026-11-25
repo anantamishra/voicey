@@ -73,6 +73,13 @@ final class ToolInstallerTests: XCTestCase {
     func testAnAnswerIsNotMistakenForAnEdit() {
         XCTAssertTrue(TextPolisher.looksLikeEdit("Hi, how are you?", of: "hi how are you"))
         XCTAssertFalse(TextPolisher.looksLikeEdit(String(repeating: "a long reply ", count: 20), of: "hi how are you"))
+        XCTAssertFalse(TextPolisher.hasRealWords("um uh... hmm"))
+        XCTAssertFalse(TextPolisher.hasRealWords(""))
+        XCTAssertTrue(TextPolisher.hasRealWords("um, hello"))
+        XCTAssertTrue(TextPolisher.hasRealWords("[[SNIPPET1]]"))
+        // the user's own instructions may add a sign-off or a list, but a runaway reply is still rejected
+        XCTAssertTrue(TextPolisher.looksLikeEdit("Hi, how are you?\n\nThanks, Ananta", of: "hi how are you", hasInstructions: true))
+        XCTAssertFalse(TextPolisher.looksLikeEdit(String(repeating: "a long reply ", count: 40), of: "hi how are you", hasInstructions: true))
     }
 }
 
