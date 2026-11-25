@@ -1,21 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { TIPS } from "../lib/tips";
 import { initSoundPreference, setSoundEnabled, sfx, soundEnabled, unlockAudio } from "../lib/sound";
 
 // How far through the scroll story each step starts (0 = press, 1 = talk, 2 = polish, 3 = pasted).
 const STORY_STEPS = [0.18, 0.42, 0.7];
 
-const TIPS = [
-  { text: "tip: double-tap your shortcut to talk hands-free. press once more to stop.", icon: "💡" },
-  { text: "tip: any key can be your shortcut, even a single one like fn or right ⌥.", icon: "⌨️" },
-  { text: "tip: add the names you say often to the dictionary and voicey spells them right.", icon: "📖" },
-  { text: "tip: say “my address” and a snippet pastes the full text, word for word.", icon: "✂️" },
-  { text: "tip: pick a tone for each app, formal in mail and casual in messages.", icon: "🎨" },
-  { text: "tip: lost the last thing you said? copy it again from the menu bar.", icon: "📋" },
-  { text: "tip: stop talking for a few seconds and voicey transcribes by itself.", icon: "⏱️" },
-  { text: "tip: turn on double clap in settings, then clap twice to start without a keyboard.", icon: "👏" },
-];
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
 const $$ = <T extends HTMLElement = HTMLElement>(sel: string, root: ParentNode = document) =>
