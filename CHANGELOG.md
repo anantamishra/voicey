@@ -3,6 +3,13 @@
 Each release needs a `## X.Y.Z` section here. `tools/release.sh` uses it as the release notes
 shown to people in the update prompt.
 
+## 1.2.0 - 2026-11-24
+
+- Learn from my dictation (off by default, in Settings → General): Voicey suggests dictionary words, both names you say often and words you correct after it pastes, and a tone for each app. You approve every suggestion, and it keeps only candidate words and counts, never what you said.
+- Faster: the AI call no longer loads your other Claude tools (about 2 s instead of 5 s), and short, clean sentences skip the AI entirely.
+- Extra instructions now work reliably, including sign-offs, translation and lists, and a recording of only "um" no longer produces text.
+- The activity log no longer contains what you said, stays under about 200 KB, and can be cleared in Settings → General. The old log is wiped once on first launch.
+
 ## 1.1.0 - 2026-11-24
 
 - Voicey now stops and transcribes by itself after a pause in your speech. Choose 2, 3 (default) or 5 seconds, or never, in Settings → Dictation.

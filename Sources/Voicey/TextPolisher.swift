@@ -44,6 +44,17 @@ enum TextPolisher {
         return words.contains { !fillers.contains($0) }
     }
 
+    /// A short sentence that Whisper already punctuated and that has no filler needs no AI round trip (about 2 s saved).
+    /// Anything that depends on the AI (your rules, an app tone, snippets) always goes through it.
+    static func canSkipAI(_ raw: String, tone: String?) -> Bool {
+        guard Prefs.d.bool(forKey: Prefs.skipShortAI), extraInstructions.isEmpty, (tone ?? "").isEmpty, !raw.contains("[[SNIPPET") else { return false }
+        let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let first = text.first, first.isUppercase || !first.isLetter, let last = text.last, ".?!".contains(last) else { return false }
+        let words = CorrectionDiff.words(text.lowercased())
+        let fillers: Set<String> = ["um", "uh", "umm", "uhh", "er", "erm", "ah", "hmm", "like", "basically", "actually", "literally", "so", "well", "i mean"]
+        return words.count <= 10 && !words.contains(where: fillers.contains) && !text.dropLast().contains(where: { ".?!".contains($0) })
+    }
+
     static var extraInstructions: String { (Prefs.d.string(forKey: Prefs.extra) ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
 
     static func prompts(raw: String, appName: String?, tone: String?) -> (system: String, user: String) {
@@ -74,8 +85,12 @@ enum TextPolisher {
         let both = system + "\n\n" + user
         switch tool {
         case .claude:
-            let r = Shell.run(bin, ["-p", "--model", model, "--tools", "", "--no-session-persistence", "--system-prompt", system],
-                              input: user, timeout: 30)
+            // Not loading your MCP servers and slash commands cuts the start-up from about 5 s to about 2 s.
+            let base = ["-p", "--model", model, "--tools", "", "--no-session-persistence", "--system-prompt", system]
+            var r = Shell.run(bin, base + ["--strict-mcp-config", "--disable-slash-commands"], input: user, timeout: 30)
+            if r.code != 0, r.err.lowercased().contains("unknown option") || r.err.lowercased().contains("unrecognized") {
+                r = Shell.run(bin, base, input: user, timeout: 30)       // an older Claude Code without those flags
+            }
             return finish(r.code, r.out, r.err)
         case .codex:
             let file = FileManager.default.temporaryDirectory.appendingPathComponent("voicey-codex-\(UUID().uuidString).txt")
@@ -106,7 +121,7 @@ enum TextPolisher {
         DispatchQueue.global(qos: .userInitiated).async {
             let r = execute(tool: t, model: m, system: p.system, user: p.user)
             let ok = r.ok && looksLikeEdit(r.text, of: raw, hasInstructions: !extraInstructions.isEmpty)
-            vlog("polish[\(t.rawValue)/\(m.isEmpty ? "default" : m)]: ok=\(ok) \(r.ok ? r.text : r.error)")
+            vlog("polish[\(t.rawValue)/\(m.isEmpty ? "default" : m)]: ok=\(ok) in=\(raw.count) out=\(r.text.count) chars" + (r.ok ? "" : " error=\(r.error)"))
             DispatchQueue.main.async { completion(ok ? r.text : raw) }
         }
     }

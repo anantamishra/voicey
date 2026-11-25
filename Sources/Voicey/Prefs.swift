@@ -15,6 +15,8 @@ enum Prefs {
     static let autoPaste = "autoPaste"
     static let showInDock = "showInDock"
     static let autoStop = "autoStopSeconds"          // pause length that ends a dictation by itself; 0 = off
+    static let learn = "learnFromDictation"          // opt-in: suggest dictionary words and app tones
+    static let skipShortAI = "skipAIForShortText"    // short, clean dictations are pasted without an AI round trip
     static let clapToStart = "clapToStart"           // a double clap starts hands-free dictation
 
     // Recognition
@@ -42,7 +44,7 @@ enum Prefs {
     static let lastUpdateCheck = "lastUpdateCheck"
 
     static let defaults: [String: Any] = [
-        hotkey: "ctrlOptSpace", mode: DictationMode.smart.rawValue, locale: "", overlay: true, autoPaste: true, showInDock: true, clapToStart: false, autoStop: 3.0,
+        hotkey: "ctrlOptSpace", mode: DictationMode.smart.rawValue, locale: "", overlay: true, autoPaste: true, showInDock: true, clapToStart: false, learn: false, skipShortAI: true, autoStop: 3.0,
         engine: RecognitionEngine.whisper.rawValue, whisperModel: "base.en", trimSilence: true,
         polish: true, aiTool: "claude", claudeModel: "haiku", codexModel: "", extra: "",
         dictionary: "",

@@ -134,10 +134,10 @@ export default function HowItWorks() {
                 ai polish with claude code or codex, plus your own instructions
               </li>
               <li>
-                <DocumentIcon {...ICON} />a personal dictionary for names and jargon
+                <DocumentIcon {...ICON} />a personal dictionary for names and jargon, with suggestions
               </li>
               <li>
-                <PaletteIcon {...ICON} />a different tone for each app
+                <PaletteIcon {...ICON} />a different tone for each app, suggested as you go
               </li>
               <li>
                 <TextIcon {...ICON} />

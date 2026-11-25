@@ -159,7 +159,7 @@ final class Recorder {
         engine.stop()
         engine.inputNode.removeTap(onBus: 0)
         request?.endAudio()
-        vlog("stop: latest=\(latest)")
+        vlog("stop: \(latest.count) chars heard")
         if whisperMode { return finishWithWhisper() }
         // If the recognizer never sends a final result, fall back to what we have.
         let s = session
@@ -193,7 +193,7 @@ final class Recorder {
             vlog("whisper: \(audio.count / 16_000)s recorded, \(input.count / 16_000)s after trimming (trim=\(trim))")
             let t0 = Date()
             let text = WhisperRunner.transcribe(input, modelPath: modelPath, language: language, prompt: prompt)
-            vlog("whisper: \(String(format: "%.1f", Date().timeIntervalSince(t0)))s -> \(text ?? "FAILED")")
+            vlog("whisper: \(String(format: "%.1f", Date().timeIntervalSince(t0)))s -> \(text.map { "\($0.count) chars" } ?? "FAILED")")
             DispatchQueue.main.async {
                 if let text, !text.isEmpty { self?.onFinish?(text) }
                 else { self?.onFinish?(fallback) }
@@ -205,7 +205,7 @@ final class Recorder {
         DispatchQueue.main.async {
             guard !self.finished else { return }
             self.finished = true
-            vlog("finish: \(self.latest)")
+            vlog("finish: \(self.latest.count) chars")
             self.task?.cancel()
             self.task = nil
             self.request = nil

@@ -11,11 +11,11 @@ enum Paster {
         guard Prefs.d.bool(forKey: Prefs.autoPaste) else { vlog("paste: auto-paste off, clipboard only"); return }
         let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         let trusted = AXIsProcessTrustedWithOptions(opts)
-        vlog("paste: trusted=\(trusted) text=\(text)")
+        vlog("paste: trusted=\(trusted) chars=\(text.count)")
         guard trusted else { return } // text stays on the clipboard
 
         // Give the pasteboard a moment, then send a real key sequence: ⌘ down, V down, V up, ⌘ up.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             let src = CGEventSource(stateID: .hidSystemState)
             let cmd: CGKeyCode = 55, v: CGKeyCode = 9
             let steps: [(CGKeyCode, Bool, CGEventFlags)] = [

@@ -14,6 +14,8 @@
 - **One key, three gestures.** Hold to talk, press once to start and stop, or double-tap for hands-free. Any key works, including a single modifier such as `fn` or Right ⌥.
 - **Made for you.** A personal dictionary, a different tone per app (formal in Mail, casual in Slack) and snippets that expand a short phrase into saved text.
 - **Hands-free options.** Double clap to start (off by default), and Voicey stops and transcribes by itself after a few quiet seconds.
+- **Learns only if you ask.** Turn on *Learn from my dictation* and Voicey suggests dictionary words (names you say often, or words you fix after it pastes) and a tone for each app. You approve every suggestion.
+- **Fast.** Short, clean sentences are pasted without waiting for the AI, and the AI call skips your other tools, so it takes about 2 seconds instead of 5.
 - **Live pop-up** that shows your words as you speak.
 - **A regular Mac app with a menu-bar icon.** It has a Dock icon (optional) and keeps listening for your shortcut after you close its windows.
 - **First-run setup** that checks permissions, finds your AI tools (and can install them) and downloads the speech model.
@@ -97,11 +99,11 @@ last text again.
 |---|---|
 | **Dictation** | Shortcut (any key, including a single modifier), mode, language, live pop-up, paste at cursor, stop after a pause, double clap to start |
 | **Recognition** | Whisper or Apple's recognizer, which Whisper model, silence trimming |
-| **AI polish** | Which tool and model, a connection test, extra instructions such as "formal tone" |
+| **AI polish** | Which tool and model, a connection test, skip the AI for short clean text, extra instructions such as "formal tone" |
 | **Dictionary** | Names and terms to spell correctly, shared with Whisper, Apple's recognizer and the AI tool |
 | **App tones** | A writing style per app, for example formal in Mail and casual in Slack |
 | **Snippets** | Say "my address" and the saved text is pasted exactly as written |
-| **General** | Open at login, Dock icon, updates, run setup again |
+| **General** | Open at login, Dock icon, learn from my dictation, updates, clear the log, run setup again |
 
 ## How it works
 
@@ -125,7 +127,8 @@ you picked, using your own login with it. Turn **Polish with AI** off and nothin
 | Whisper doesn't run | On an older macOS the built-in engine may not start, so Voicey uses Apple's recognizer instead. |
 | An AI tool test fails with a sign-in message | Click **Sign in** next to the tool and finish in your browser. |
 
-The activity log is at `~/Library/Logs/Voicey.log`, and downloaded speech models are in
+The activity log is at `~/Library/Logs/Voicey.log`. It holds timings and counts, never what you said, stays under about 200 KB,
+and has a Clear button in **Settings → General**. Downloaded speech models are in
 `~/Library/Application Support/Voicey/models`.
 
 ## Build from source

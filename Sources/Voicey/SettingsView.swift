@@ -66,6 +66,10 @@ struct SettingsView: View {
     @AppStorage(Prefs.overlay) private var overlay = true
     @AppStorage(Prefs.clapToStart) private var clapToStart = false
     @AppStorage(Prefs.autoStop) private var autoStop = 3.0
+    @AppStorage(Prefs.learn) private var learn = false
+    @AppStorage(Prefs.skipShortAI) private var skipShortAI = true
+    @State private var logCleared = false
+    @State private var learnedCleared = false
     @ObservedObject private var store = ModelStore.shared
     @ObservedObject private var personal = Personalization.shared
     @ObservedObject private var tools = AIToolStore.shared
@@ -227,6 +231,8 @@ struct SettingsView: View {
                 SwitchRow(symbol: "sparkles", title: "Polish with AI", isOn: $polish)
                 Group {
                     Separator()
+                    SwitchRow(symbol: "bolt", title: "Skip AI for short, clean text", isOn: $skipShortAI)
+                    Separator()
                     Row(symbol: "terminal", title: "Tool") {
                         MenuPicker(selection: $aiTool, options: AITools.all.filter(\.canPolish).map { info in
                             (info.id.rawValue, info.name + (tools.status(info.id)?.usable == false || (tools.status(info.id) == nil && !tools.statuses.isEmpty) ? " \u{2013} not found" : ""))
@@ -273,7 +279,7 @@ struct SettingsView: View {
                 .disabled(!polish)
                 .opacity(polish ? 1 : 0.4)
             }
-            Footer(text: "The AI tool fixes misheard words, punctuation and filler, and only ever sees the transcript text. Voicey works with Claude Code and Codex. Extra instructions are added to every cleanup, e.g. \u{201C}formal tone\u{201D} or \u{201C}keep technical terms exactly as spoken\u{201D}.")
+            Footer(text: "The AI tool fixes misheard words, punctuation and filler, and only ever sees the transcript text. Voicey works with Claude Code and Codex. Short, already clean sentences are pasted straight away, which saves about two seconds; anything that needs the AI (extra instructions, an app tone, snippets) always goes through it. Extra instructions are added to every cleanup, e.g. \u{201C}formal tone\u{201D} or \u{201C}keep technical terms exactly as spoken\u{201D}.")
         }
         .onAppear { if tools.statuses.isEmpty { tools.rescan() } }
     }
@@ -312,7 +318,10 @@ struct SettingsView: View {
                 SwitchRow(symbol: "power", title: "Open at login", isOn: $launchAtLogin)
                 Separator()
                 SwitchRow(symbol: "dock.rectangle", title: "Show Voicey in the Dock", isOn: $showInDock)
+                Separator()
+                SwitchRow(symbol: "lightbulb", title: "Learn from my dictation", isOn: $learn)
             }
+            Footer(text: "Voicey suggests dictionary words (names and terms you say often, or fix after it pastes) and a tone for the apps you use, and you approve each one. It remembers only candidate words and counts, never what you said, and nothing is added until you click.")
             if !launchError.isEmpty { Footer(text: launchError).foregroundStyle(.red) }
             SectionHeader(text: "Updates")
             Card {
@@ -338,7 +347,14 @@ struct SettingsView: View {
             SectionHeader(text: "Support")
             Card {
                 Row(symbol: "doc.text", title: "Activity log") {
-                    Button("Show") { NSWorkspace.shared.open(URL(fileURLWithPath: NSHomeDirectory() + "/Library/Logs/Voicey.log")) }
+                    HStack(spacing: 8) {
+                        Button("Show") { NSWorkspace.shared.open(logURL) }
+                        Button(logCleared ? "Cleared" : "Clear") { clearLog(); logCleared = true }.disabled(logCleared)
+                    }
+                }
+                Separator()
+                Row(symbol: "brain", title: "What Voicey learned") {
+                    Button(learnedCleared ? "Forgotten" : "Forget it all") { Learning.shared.reset(); learnedCleared = true }.disabled(learnedCleared)
                 }
                 Separator()
                 Row(symbol: "folder", title: "Whisper models") {

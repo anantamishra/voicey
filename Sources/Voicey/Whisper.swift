@@ -108,7 +108,7 @@ enum WhisperRunner {
         do { try wav(samples).write(to: file) } catch { return nil }
         defer { try? FileManager.default.removeItem(at: file) }
 
-        var args = ["-m", modelPath, "-f", file.path, "-nt", "-np", "-l", language,
+        var args = ["-m", modelPath, "-f", file.path, "-nt", "-np", "-nf", "-l", language,
                     "-t", String(max(4, ProcessInfo.processInfo.activeProcessorCount / 2))]
         if !prompt.isEmpty { args += ["--prompt", prompt] }
         let result = Shell.run(cli, args, timeout: 120)
